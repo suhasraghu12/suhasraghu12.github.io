@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Suhas R — AI/ML Engineer in Bangalore. Real-time computer vision in production, LLM/RAG systems and AI pipelines.">
+<meta name="description" content="Suhas R — AI/ML Engineer in Bangalore. Co-founder of Channel Ace (acquihired by PESU Venture Labs). Real-time computer vision in production, LLM/RAG systems and AI pipelines.">
 <title>Suhas R · Model Card</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -189,6 +189,7 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
       <dl>
         <dt>architecture</dt><dd>human, caffeine-augmented</dd>
         <dt>base</dt><dd>MCA, PES University</dd>
+        <dt>prior</dt><dd>Co-founder, Channel Ace (acquihired)</dd>
         <dt>fine-tuned on</dt><dd>CV · LLM/RAG · AI pipelines · forecasting</dd>
         <dt>deployed at</dt><dd>Mysore Traffic Authority, Kempegowda Intl. Airport</dd>
         <dt>region</dt><dd>Bangalore, India</dd>
@@ -220,8 +221,8 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">02 · in production</div>
-      <h2>Serving real traffic</h2>
-      <p>What I build at PESU Venture Labs, where I've been an AI/ML Engineer since November 2025.</p>
+      <h2>Shipped, deployed, acquihired</h2>
+      <p>From co-founding Channel Ace to PESU Venture Labs, which acquihired our team. I've been an AI/ML Engineer there since November 2025.</p>
     </div>
     <div class="ckpts prod" id="prodCards"></div>
   </div>
@@ -322,15 +323,16 @@ const PROJECTS = [
   { id:'Scene-Detection', tag:'computer vision', name:'Cinematic scene change detector', desc:'Finds scene cuts in video using HSV histogram correlation or frame differencing, with live threshold tuning on cached signals and a keyframe film strip for every cut.', m:[['2','algorithms'],['0–100','cut score'],['4','video formats']], stack:['OpenCV','NumPy','Streamlit'], repo:GH+'Scene-Detection' },
 ];
 const PROD = [
+  { id:'channel-ace', status:'acquihired', name:'Channel Ace: FranchiseKonnect', desc:'Co-founded in my final year of MCA. An AI franchise platform that matches owners and would-be franchisees to business models that fit their investment capacity, skills, time and location, and shows what the revenue could look like. I led the ML and data science side. PESU Venture Labs later acquihired the team.', m:[['14','business domains'],['4+','matching factors'],['1','acquihire']], stack:['Co-founder','ML / data science','Pattern mining','Recommendation','Location demographics'], where:['Business-model matching','Cross-promotion from local demographics'] },
   { id:'traffic-vision', status:'serving', name:'Traffic violation detection & ANPR', desc:'Real-time system on live camera streams that detects helmet, seatbelt, mobile-use, triple-riding and parking violations, then reads the number plate.', m:[['~95%','ANPR accuracy'],['~90%','violation acc.'],['5','violation types']], stack:['YOLOv11','PyTorch','OpenCV','PARSeq OCR','FastAPI','SQL'], where:['Mysore Traffic Authority','Kempegowda Intl. Airport'] },
   { id:'research-pipeline', status:'serving', name:'Multimodal AI research pipeline', desc:'Takes papers, transcripts, images, datasets and web sources through dependent analysis stages, ending in a Go / No-Go / Pivot call. Autopilot resolves the stage graph; researchers can rerun, iterate or branch any stage.', m:[['6','analysis stages'],['3','rerun·iterate·branch'],['S3 + web','grounding']], stack:['LLM orchestration','Amazon S3','Web search','Multimodal','Evaluation'], where:['TRL','market','adversarial review'] },
 ];
 const EPOCHS = [
   { e:'epoch 0', y:"May '19", loss:2.4, t:'B.Sc. Physics, Maths, CS', d:"Yuvaraja's College, Mysore. Linear algebra and probability, the weights everything else loads from." },
   { e:'epoch 1', y:"Oct '22", loss:1.5, t:'Data analytics, certified', d:'Statistics, SQL, Python and NLP basics. First real datasets.' },
-  { e:'epoch 2', y:"Oct '23", loss:0.9, t:'MCA at PES University', d:'Deep learning, CNNs and RNNs, and the move from notebooks to systems.' },
-  { e:'epoch 3', y:"Jun '25", loss:0.55, t:'MCA complete', d:'Graduated from PES University with an ML focus.' },
-  { e:'epoch 4', y:"Nov '25", loss:0.28, t:'AI/ML Engineer, PESU Venture Labs', d:'Real-time traffic violation detection and ANPR, plus a multi-stage AI research pipeline.' },
+  { e:'epoch 2', y:"Oct '23", loss:0.9, t:'MCA at PES University', d:'Deep learning, CNNs and RNNs, and the move from notebooks to systems. Graduated June 2025.' },
+  { e:'epoch 3', y:"'24–'25", loss:0.55, t:'Co-founded Channel Ace', d:'Final year of MCA. Led ML on FranchiseKonnect: franchise data from 14 domains turned into business-model recommendations.' },
+  { e:'epoch 4', y:"Nov '25", loss:0.28, t:'Acquihired: AI/ML Engineer, PESU Venture Labs', d:'The team joined PESU Venture Labs. Since then: traffic violation detection and ANPR, and a multi-stage AI research pipeline.' },
   { e:'epoch 5', y:'2026', loss:0.12, t:'In production, still training', d:'Systems live at two sites. Building Interrupt, a turn-taking benchmark for voice agents.' },
 ];
 const SK_ROWS = ['PyTorch','TensorFlow · Keras','YOLOv11 · OpenCV','LangChain · RAG','Pinecone · FAISS · Chroma','Whisper · Pipecat','scikit-learn · Prophet','FastAPI · SQL'];
@@ -460,7 +462,7 @@ function print(html){ out.insertAdjacentHTML('beforeend',html+'\n'); out.scrollT
 const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const CMDS={
   help:()=>`<span class="hi">commands</span>\n  whoami      who is this model\n  experience  what's in production\n  education   pretraining data\n  projects    list checkpoints\n  skills      top attention weights\n  train       run one training step\n  predict     predict fit for your team\n  contact     inference endpoint\n  clear       clear the session`,
-  whoami:()=>`<span class="hi">Suhas R</span> · AI/ML Engineer @ PESU Venture Labs · Bangalore\nReal-time CV in production, LLM/RAG systems, AI pipeline orchestration.\nMCA, PES University (2025).\nCurrently training: <span class="p">interrupt</span> (turn-taking for voice agents).`,
+  whoami:()=>`<span class="hi">Suhas R</span> · AI/ML Engineer @ PESU Venture Labs · Bangalore\nReal-time CV in production, LLM/RAG systems, AI pipeline orchestration.\nCo-founded Channel Ace (FranchiseKonnect), acquihired by PESU Venture Labs.\nMCA, PES University (2025).\nCurrently training: <span class="p">interrupt</span> (turn-taking for voice agents).`,
   projects:()=>PROJECTS.map(p=>`<span class="p">${p.id.padEnd(16)}</span>${p.name}  <span class="dim">(${p.m[0][0]} ${p.m[0][1]})</span>`).join('\n')+`\n<span class="dim">type a repo name to open its summary</span>`,
   skills:()=>{ const all=[]; SK.forEach((r,i)=>r.forEach((v,j)=>all.push([v,SK_ROWS[i],SK_COLS[j]]))); return all.sort((a,b)=>b[0]-a[0]).slice(0,5).map(([v,r,c])=>`${v.toFixed(2)}  ${r} → ${c}`).join('\n'); },
   contact:()=>`email:  <span class="hi">suhasraghu3@gmail.com</span>\nor scroll down to the inference endpoint.`,
@@ -470,8 +472,8 @@ const CMDS={
   exit:()=>`<span class="dim">nice try. this model is always serving.</span>`,
 };
 let step=0, loss=0.12;
-CMDS.experience=()=>`<span class="hi">AI/ML Engineer — PESU Venture Labs</span>  <span class="dim">Nov 2025 – present</span>\n`+PROD.map(p=>`<span class="ok">● ${p.status}</span> ${p.name}\n  <span class="dim">${p.m.map(([v,l])=>v+' '+l).join(' · ')}</span>`).join('\n');
-CMDS.education=()=>EPOCHS.slice(0,4).map(e=>`<span class="p">${e.y.padEnd(8)}</span>${e.t}`).join('\n');
+CMDS.experience=()=>`<span class="hi">AI/ML Engineer — PESU Venture Labs</span>  <span class="dim">Nov 2025 – present</span>\n<span class="hi">Co-founder — Channel Ace</span>  <span class="dim">2024 – 2025 · acquihired</span>\n`+PROD.map(p=>`<span class="ok">● ${p.status}</span> ${p.name}\n  <span class="dim">${p.m.map(([v,l])=>v+' '+l).join(' · ')}</span>`).join('\n');
+CMDS.education=()=>EPOCHS.slice(0,3).map(e=>`<span class="p">${e.y.padEnd(8)}</span>${e.t}`).join('\n');
 CMDS.train=()=>{ step++; loss=Math.max(0.01,loss*(0.8+Math.random()*.15)); const bar='█'.repeat(Math.round(20*(1-loss/0.12)))+'░'.repeat(20-Math.round(20*(1-loss/0.12)));
   return `step ${step}  [${bar}]  loss=<span class="ok">${loss.toFixed(4)}</span>  lr=3e-4`; };
 PROJECTS.forEach(p=>{ CMDS[p.id.toLowerCase()]=()=>`<span class="hi">${p.name}</span>\n${p.desc}\n<span class="dim">${p.m.map(([v,l])=>v+' '+l).join(' · ')}</span>\n<a href="${p.repo}" target="_blank" rel="noopener">${p.repo}</a>`; });
