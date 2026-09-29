@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Suhas R — AI/ML Engineer in Bangalore. Real-time computer vision in production, LLM/RAG systems and AI pipelines.">
+<title>Suhas R · Model Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: the portfolio is a model card. Hero = a live network you can feed with your cursor,
+   then Training log (loss curve = career), Checkpoints (projects), Attention map (skills), REPL, Inference endpoint (contact).
+   Single dark theme by choice: the palette is matplotlib's magma colormap on an ink ground. */
+:root {
+  --ink: #0a0913;
+  --ink-2: #13111f;
+  --ink-3: #1d1a2e;
+  --line: #2c2742;
+  --fg: #ece8f5;
+  --muted: #9a93b3;
+  --m0: #51127c;   /* magma 0.25 */
+  --m1: #b73779;   /* magma 0.50 */
+  --m2: #fc8961;   /* magma 0.75 */
+  --m3: #fcfdbf;   /* magma 1.00 */
+  --ok: #7ee0b0;
+  --f-display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --s-xs: .78rem; --s-sm: .9rem; --s-md: 1.05rem; --s-lg: 1.4rem; --s-xl: clamp(1.8rem, 4vw, 2.6rem); --s-hero: clamp(2.4rem, 8vw, 5.6rem);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--ink); color: var(--fg); font-family: var(--f-body); font-size: var(--s-md); line-height: 1.6; }
+::selection { background: var(--m1); color: var(--m3); }
+a { color: var(--m2); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--m2); outline-offset: 3px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: max(16px, 4vw); }
+.mono { font-family: var(--f-mono); }
+.eyebrow { font-family: var(--f-mono); font-size: var(--s-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.05; }
+h2 { font-size: var(--s-xl); font-weight: 600; }
+section { padding-block: clamp(56px, 9vw, 110px); border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: 10px; margin-bottom: 36px; }
+.sec-head p { color: var(--muted); max-width: 60ch; margin: 0; }
+
+/* ---------- top bar ---------- */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--ink) 82%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+.bar .id { font-family: var(--f-mono); font-size: var(--s-sm); display: flex; align-items: center; gap: 10px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); flex: none; animation: pulse 2s infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+.bar nav { display: flex; gap: 18px; font-family: var(--f-mono); font-size: var(--s-xs); }
+.bar nav a { color: var(--muted); text-decoration: none; }
+.bar nav a:hover { color: var(--m3); }
+@media (max-width: 720px) { .bar nav { display: none; } }
+
+/* ---------- hero ---------- */
+.hero { position: relative; overflow: hidden; border-top: 0; padding-block: clamp(40px, 7vw, 90px) clamp(40px, 6vw, 70px); }
+#net { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: end; pointer-events: none; }
+.hero .wrap > * { pointer-events: auto; }
+@media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; } }
+.hero h1 { font-size: var(--s-hero); font-weight: 800; letter-spacing: -.02em; }
+.hero h1 .grad { background: linear-gradient(90deg, var(--m1), var(--m2) 55%, var(--m3)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero .tag { font-size: var(--s-lg); color: var(--fg); max-width: 34ch; margin: 18px 0 0; line-height: 1.4; }
+.hero .hint { margin-top: 22px; font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); }
+.hero .hint b { color: var(--m2); font-weight: 600; }
+
+.card-meta { background: color-mix(in srgb, var(--ink-2) 88%, transparent); border: 1px solid var(--line); border-radius: 10px; font-family: var(--f-mono); font-size: var(--s-xs); backdrop-filter: blur(6px); }
+.card-meta header { display: flex; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--muted); }
+.card-meta dl { margin: 0; padding: 12px 14px; display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; }
+.card-meta dt { color: var(--muted); }
+.card-meta dd { margin: 0; color: var(--fg); min-width: 0; overflow-wrap: anywhere; }
+.card-meta .out { padding: 12px 14px; border-top: 1px solid var(--line); display: grid; gap: 7px; }
+.probs { display: grid; grid-template-columns: 7.5em 1fr 3.2em; gap: 8px; align-items: center; }
+.probs .track { height: 6px; background: var(--ink-3); border-radius: 3px; overflow: hidden; }
+.probs .fill { height: 100%; background: linear-gradient(90deg, var(--m0), var(--m1), var(--m2)); width: 0; transition: width .25s ease; }
+.probs .v { text-align: right; color: var(--m3); font-variant-numeric: tabular-nums; }
+
+/* ---------- training log ---------- */
+.loss { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 860px) { .loss { grid-template-columns: 1fr; } }
+.chart { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; padding: 14px; overflow-x: auto; }
+.chart svg { display: block; width: 100%; min-width: 520px; height: auto; }
+.chart text { font-family: var(--f-mono); font-size: 11px; fill: var(--muted); }
+.chart .lbl { fill: var(--fg); font-size: 11.5px; }
+.epochs { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.epochs li { display: grid; grid-template-columns: 5.5em minmax(0, 1fr); gap: 14px; padding: 12px 10px; border-radius: 8px; transition: background .2s; cursor: default; }
+.epochs li.on { background: var(--ink-3); }
+.epochs .e { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--m2); padding-top: 3px; }
+.epochs h3 { font-family: var(--f-body); font-size: var(--s-md); font-weight: 600; line-height: 1.35; }
+.epochs p { margin: 2px 0 0; color: var(--muted); font-size: var(--s-sm); }
+
+/* ---------- checkpoints ---------- */
+.sample-note { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--m2); border: 1px dashed color-mix(in srgb, var(--m2) 55%, transparent); border-radius: 6px; padding: 6px 10px; justify-self: start; }
+.ckpts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 18px; }
+.ckpt { position: relative; background: var(--ink-2); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: grid; gap: 14px; grid-template-rows: auto auto 1fr auto auto; overflow: hidden; transition: border-color .25s, transform .25s; }
+.ckpt:hover { border-color: var(--m1); transform: translateY(-3px); }
+.ckpt::before { content: ""; position: absolute; inset: 0; background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--m1) 18%, transparent), transparent 60%); opacity: 0; transition: opacity .3s; pointer-events: none; }
+.ckpt:hover::before { opacity: 1; }
+.ckpt .top { display: flex; justify-content: space-between; gap: 12px; font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); }
+.ckpt h3 { font-size: 1.15rem; font-weight: 600; }
+.ckpt p { margin: 0; color: var(--muted); font-size: var(--s-sm); }
+.metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.metric { background: var(--ink-3); border-radius: 8px; padding: 8px 10px; min-width: 0; }
+.metric b { display: block; font-family: var(--f-mono); font-size: 1rem; color: var(--m3); font-variant-numeric: tabular-nums; }
+.metric span { font-family: var(--f-mono); font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.stack { display: flex; flex-wrap: wrap; gap: 6px; }
+.stack span { font-family: var(--f-mono); font-size: .72rem; padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--fg); }
+.prod .ckpt { border-color: color-mix(in srgb, var(--ok) 35%, var(--line)); }
+.prod .metric b { font-size: 1.35rem; }
+.where { display: flex; flex-wrap: wrap; gap: 6px; font-family: var(--f-mono); font-size: .72rem; color: var(--ok); }
+.links { display: flex; gap: 16px; font-family: var(--f-mono); font-size: var(--s-xs); }
+
+/* ---------- attention map ---------- */
+.attn { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 860px) { .attn { grid-template-columns: 1fr; } }
+.heat-wrap { overflow-x: auto; }
+.heat { display: grid; grid-template-columns: 9em repeat(6, minmax(52px, 1fr)); gap: 4px; min-width: 480px; font-family: var(--f-mono); font-size: var(--s-xs); }
+.heat .col { color: var(--muted); text-align: center; padding-bottom: 6px; align-self: end; }
+.heat .row { color: var(--fg); align-self: center; padding-right: 8px; }
+.heat .cell { aspect-ratio: 1.5; border-radius: 4px; display: grid; place-items: center; font-variant-numeric: tabular-nums; cursor: crosshair; transition: transform .15s, outline-color .15s; outline: 2px solid transparent; }
+.heat .cell:hover, .heat .cell.hl { transform: scale(1.06); outline-color: var(--m3); }
+.legend { display: flex; align-items: center; gap: 10px; margin-top: 14px; font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); }
+.legend .bar-g { height: 8px; flex: 1; max-width: 220px; border-radius: 4px; background: linear-gradient(90deg, #000004, var(--m0), var(--m1), var(--m2), var(--m3)); }
+.readout { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; padding: 18px; font-family: var(--f-mono); font-size: var(--s-sm); display: grid; gap: 10px; }
+.readout .big { font-family: var(--f-display); font-size: 2.4rem; color: var(--m3); font-variant-numeric: tabular-nums; }
+.readout .q { color: var(--muted); }
+
+/* ---------- REPL ---------- */
+.term { background: #07060d; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; box-shadow: 0 30px 80px -40px var(--m1); }
+.term header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); }
+.term header i { width: 10px; height: 10px; border-radius: 50%; background: var(--ink-3); }
+.term header i:nth-child(1) { background: var(--m1); } .term header i:nth-child(2) { background: var(--m2); } .term header i:nth-child(3) { background: var(--m3); }
+.term header span { margin-left: 8px; }
+#out { height: 340px; overflow-y: auto; padding: 16px; font-family: var(--f-mono); font-size: .86rem; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
+#out .p { color: var(--m2); } #out .ok { color: var(--ok); } #out .dim { color: var(--muted); } #out .hi { color: var(--m3); } #out .err { color: var(--m1); }
+.term form { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-top: 1px solid var(--line); font-family: var(--f-mono); }
+.term form label { color: var(--m2); flex: none; }
+#cmd { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--fg); font: inherit; font-size: .9rem; outline: none; caret-color: var(--m2); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.chips button { font-family: var(--f-mono); font-size: var(--s-xs); background: var(--ink-2); color: var(--fg); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.chips button:hover { border-color: var(--m2); color: var(--m3); }
+
+/* ---------- endpoint ---------- */
+.endpoint { display: grid; gap: 22px; }
+.endpoint h2 { font-size: clamp(2rem, 6vw, 4rem); font-weight: 800; }
+.req { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; padding: 18px; font-family: var(--f-mono); font-size: .88rem; overflow-x: auto; white-space: pre; }
+.req .k { color: var(--m2); } .req .s { color: var(--m3); } .req .c { color: var(--muted); }
+.contact-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.email { font-family: var(--f-mono); font-size: var(--s-md); background: var(--ink-3); padding: 10px 14px; border-radius: 8px; user-select: all; overflow-wrap: anywhere; }
+.btn { font-family: var(--f-mono); font-size: var(--s-sm); padding: 10px 16px; border-radius: 8px; border: 1px solid var(--m2); background: transparent; color: var(--m3); cursor: pointer; text-decoration: none; }
+.btn.solid { background: linear-gradient(90deg, var(--m1), var(--m2)); color: var(--ink); border-color: transparent; font-weight: 600; }
+.btn:hover { filter: brightness(1.12); }
+footer { padding-block: 30px; border-top: 1px solid var(--line); font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+
+<div class="bar">
+  <div class="wrap">
+    <div class="id"><span class="dot" aria-hidden="true"></span><span>suhas-r-v1 · status: <span style="color:var(--ok)">serving</span></span></div>
+    <nav aria-label="Sections">
+      <a href="#log">training_log</a><a href="#prod">production</a><a href="#checkpoints">checkpoints</a><a href="#attention">attention</a><a href="#repl">repl</a><a href="#endpoint">endpoint</a>
+    </nav>
+  </div>
+</div>
+
+<header class="hero">
+  <canvas id="net" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Model card · AI / ML Engineer · PESU Venture Labs</div>
+      <h1 style="margin-top:14px">Suhas <span class="grad">R</span></h1>
+      <p class="tag">I ship computer vision that runs on live traffic cameras, and LLM systems that show their evidence.</p>
+      <p class="hint">move your cursor · it's the <b>input tensor</b> for the network behind this text</p>
+    </div>
+    <aside class="card-meta" aria-label="Model details">
+      <header><span>model_card.yaml</span><span id="fps">— ms/step</span></header>
+      <dl>
+        <dt>architecture</dt><dd>human, caffeine-augmented</dd>
+        <dt>base</dt><dd>MCA, PES University</dd>
+        <dt>fine-tuned on</dt><dd>CV · LLM/RAG · AI pipelines · forecasting</dd>
+        <dt>deployed at</dt><dd>Mysore Traffic Authority, Kempegowda Intl. Airport</dd>
+        <dt>region</dt><dd>Bangalore, India</dd>
+        <dt>license</dt><dd>open to work</dd>
+      </dl>
+      <div class="out" id="probs" aria-label="Live output probabilities">
+        <div class="eyebrow" style="margin-bottom:2px">softmax(output)</div>
+      </div>
+    </aside>
+  </div>
+</header>
+
+<main>
+<section id="log">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">01 · training_log</div>
+      <h2>Loss went down. Mostly.</h2>
+      <p>My career as a training run, from a physics and maths degree to production ML. Hover an epoch to find it on the curve.</p>
+    </div>
+    <div class="loss">
+      <div class="chart"><svg id="lossSvg" viewBox="0 0 640 300" role="img" aria-label="Training loss curve falling from 2.4 in 2019 to 0.12 in 2026"></svg></div>
+      <ol class="epochs" id="epochs"></ol>
+    </div>
+  </div>
+</section>
+
+<section id="prod">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">02 · in production</div>
+      <h2>Serving real traffic</h2>
+      <p>What I build at PESU Venture Labs, where I've been an AI/ML Engineer since November 2025.</p>
+    </div>
+    <div class="ckpts prod" id="prodCards"></div>
+  </div>
+</section>
+
+<section id="checkpoints">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">03 · checkpoints</div>
+      <h2>Side projects</h2>
+      <p>Open-source work outside the day job. Numbers come from each repo, and every card links to the code.</p>
+          </div>
+    <div class="ckpts" id="ckpts"></div>
+  </div>
+</section>
+
+<section id="attention">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">04 · attention weights</div>
+      <h2>Where my attention goes</h2>
+      <p>Skills as an attention map: rows are tools, columns are problem domains. Brighter means I've used it there more, at work and in my projects.</p>
+    </div>
+    <div class="attn">
+      <div>
+        <div class="heat-wrap"><div class="heat" id="heat"></div></div>
+        <div class="legend"><span>0.0</span><span class="bar-g"></span><span>1.0</span></div>
+      </div>
+      <div class="readout" id="readout" aria-live="polite">
+        <div class="q">attn[query, key]</div>
+        <div class="big" id="ro-v">0.98</div>
+        <div id="ro-t">YOLOv11 · OpenCV → Vision</div>
+        <div class="q" id="ro-n">Hover any cell to read its weight.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="repl">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">05 · interactive session</div>
+      <h2>Query the model</h2>
+      <p>A working REPL. Type <span class="mono" style="color:var(--m2)">help</span>, or tap a command.</p>
+    </div>
+    <div class="term">
+      <header><i></i><i></i><i></i><span>python3 -i suhas.py</span></header>
+      <div id="out" role="log" aria-live="polite"></div>
+      <form id="replForm" autocomplete="off">
+        <label for="cmd">&gt;&gt;&gt;</label>
+        <input id="cmd" type="text" spellcheck="false" placeholder="try: projects" aria-label="REPL command">
+      </form>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+</section>
+
+<section id="endpoint">
+  <div class="wrap endpoint">
+    <div class="eyebrow">06 · inference endpoint</div>
+    <h2>Send a request.</h2>
+<div class="req"><span class="c"># p50 reply latency: under 24h</span>
+<span class="k">POST</span> /v1/hire
+{
+  <span class="k">"role"</span>: <span class="s">"ML Engineer"</span>,
+  <span class="k">"location"</span>: <span class="s">"Bangalore"</span>,
+  <span class="k">"team"</span>: <span class="s">"your team"</span>,
+  <span class="k">"temperature"</span>: 0.2
+}</div>
+    <div class="contact-row">
+      <span class="email" id="email">suhasraghu3@gmail.com</span>
+      <button class="btn solid" id="copyBtn" type="button">Copy email</button>
+      <a class="btn" href="https://github.com/suhasraghu12" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://www.linkedin.com/in/suhasraghu12" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>suhas-r-v1 · checkpoint 2026.09 · Bangalore</span><span>no GPUs were harmed</span></div></footer>
+
+<script>
+(() => {
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- magma colormap ---------- */
+const MAGMA = [[0,0,4],[28,16,68],[79,18,123],[129,37,129],[181,54,122],[229,80,100],[251,135,97],[254,194,135],[252,253,191]];
+function magma(t){ t=Math.max(0,Math.min(1,t)); const x=t*(MAGMA.length-1), i=Math.floor(x), f=x-i; const a=MAGMA[i], b=MAGMA[Math.min(i+1,MAGMA.length-1)]; return `rgb(${a.map((v,k)=>Math.round(v+(b[k]-v)*f)).join(',')})`; }
+
+/* ---------- content ---------- */
+const GH = 'https://github.com/suhasraghu12/';
+const PROJECTS = [
+  { id:'interrupt', tag:'voice agents', status:'in progress', name:'Interrupt: turn-taking for voice agents', desc:'A real-time voice agent with an explicit, measurable turn-taking module, benchmarked against a fixed-silence baseline and Pipecat\'s smart-turn model. Every turn is traced with per-stage latency.', m:[['3-arm','benchmark'],['<600ms','p50 target'],['$0','local stack']], stack:['Pipecat','LiveKit','faster-whisper','Silero VAD','React'], repo:GH+'interrupt' },
+  { id:'lexiguard_ai', tag:'legal RAG', name:'LexiGuard AI', desc:'Legal RAG over statutes and contracts. Fuses BGE dense vectors with BM25 through reciprocal rank fusion, rewrites layman queries into legal terms, and audits every answer with an LLM judge.', m:[['k=60','RRF fusion'],['top-6','cited chunks'],['0–100%','grounding score']], stack:['ChromaDB','BGE','BM25','Gemini 2.5','Streamlit'], repo:GH+'lexiguard_ai' },
+  { id:'time_series', tag:'deep learning', name:'Transformer vs LSTM forecasting', desc:'Multi-head self-attention written from scratch and pitted against a parameter-matched LSTM on the ETTh1 grid benchmark. The attention model\'s lead grows as the lookback window grows.', m:[['0.1905','MAE @192'],['−16%','error vs LSTM'],['102K','params each']], stack:['PyTorch','Self-attention','ETTh1'], repo:GH+'time_series' },
+  { id:'youtube_chatbot', tag:'multimodal RAG', name:'YouTube video Q&A', desc:'Paste a link and ask questions about the video. Audio is transcribed with Whisper, chunked and embedded into Pinecone, and answered by GPT-4o-mini with timestamp-level sources and conversational memory.', m:[['top-5','retrieved'],['1000/200','chunk/overlap'],['5-turn','memory']], stack:['Whisper','LangChain','Pinecone','FastAPI','Docker'], repo:GH+'youtube_chatbot' },
+  { id:'dalal_bot', tag:'anomaly detection', name:'DalalBot', desc:'Real-time NSE stock monitor with unsupervised anomaly detection and price alerts. A background scheduler sweeps targets and fires each alert exactly once over email and Telegram.', m:[['2.5%','contamination'],['3.0σ','z-score'],['2','alert channels']], stack:['Isolation Forest','yfinance','APScheduler','SQLite','Plotly'], repo:GH+'dalal_bot' },
+  { id:'Scene-Detection', tag:'computer vision', name:'Cinematic scene change detector', desc:'Finds scene cuts in video using HSV histogram correlation or frame differencing, with live threshold tuning on cached signals and a keyframe film strip for every cut.', m:[['2','algorithms'],['0–100','cut score'],['4','video formats']], stack:['OpenCV','NumPy','Streamlit'], repo:GH+'Scene-Detection' },
+];
+const PROD = [
+  { id:'traffic-vision', status:'serving', name:'Traffic violation detection & ANPR', desc:'Real-time system on live camera streams that detects helmet, seatbelt, mobile-use, triple-riding and parking violations, then reads the number plate.', m:[['~95%','ANPR accuracy'],['~90%','violation acc.'],['5','violation types']], stack:['YOLOv11','PyTorch','OpenCV','PARSeq OCR','FastAPI','SQL'], where:['Mysore Traffic Authority','Kempegowda Intl. Airport'] },
+  { id:'research-pipeline', status:'serving', name:'Multimodal AI research pipeline', desc:'Takes papers, transcripts, images, datasets and web sources through dependent analysis stages, ending in a Go / No-Go / Pivot call. Autopilot resolves the stage graph; researchers can rerun, iterate or branch any stage.', m:[['6','analysis stages'],['3','rerun·iterate·branch'],['S3 + web','grounding']], stack:['LLM orchestration','Amazon S3','Web search','Multimodal','Evaluation'], where:['TRL','market','adversarial review'] },
+];
+const EPOCHS = [
+  { e:'epoch 0', y:"May '19", loss:2.4, t:'B.Sc. Physics, Maths, CS', d:"Yuvaraja's College, Mysore. Linear algebra and probability, the weights everything else loads from." },
+  { e:'epoch 1', y:"Oct '22", loss:1.5, t:'Data analytics, certified', d:'Statistics, SQL, Python and NLP basics. First real datasets.' },
+  { e:'epoch 2', y:"Oct '23", loss:0.9, t:'MCA at PES University', d:'Deep learning, CNNs and RNNs, and the move from notebooks to systems.' },
+  { e:'epoch 3', y:"Jun '25", loss:0.55, t:'MCA complete', d:'Graduated from PES University with an ML focus.' },
+  { e:'epoch 4', y:"Nov '25", loss:0.28, t:'AI/ML Engineer, PESU Venture Labs', d:'Real-time traffic violation detection and ANPR, plus a multi-stage AI research pipeline.' },
+  { e:'epoch 5', y:'2026', loss:0.12, t:'In production, still training', d:'Systems live at two sites. Building Interrupt, a turn-taking benchmark for voice agents.' },
+];
+const SK_ROWS = ['PyTorch','TensorFlow · Keras','YOLOv11 · OpenCV','LangChain · RAG','Pinecone · FAISS · Chroma','Whisper · Pipecat','scikit-learn · Prophet','FastAPI · SQL'];
+const SK_COLS = ['NLP','LLM','Speech','Vision','Time series','Serving'];
+const SK = [
+  [.55,.35,.40,.90,.97,.35],
+  [.40,.10,.10,.55,.80,.30],
+  [.05,.05,.05,.98,.10,.85],
+  [.70,.96,.25,.10,.05,.50],
+  [.50,.93,.10,.05,.05,.55],
+  [.45,.40,.95,.05,.05,.60],
+  [.40,.10,.05,.20,.92,.35],
+  [.30,.75,.60,.85,.55,.96],
+];
+
+/* ---------- hero network ---------- */
+const cv = document.getElementById('net'), ctx = cv.getContext('2d');
+const LAYERS = [4,7,9,7,4];
+const OUT_LABELS = ['hire','collaborate','ask a question','just browsing'];
+let W=0,H=0,dpr=1,nodes=[],edges=[],pulses=[];
+let mouse={x:.72,y:.4,active:false};
+function layout(){
+  const r=cv.getBoundingClientRect(); dpr=Math.min(devicePixelRatio||1,2); W=r.width; H=r.height;
+  cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  nodes=[]; edges=[];
+  const x0 = W<860 ? W*.08 : W*.42, x1 = W*.95;
+  LAYERS.forEach((n,li)=>{ const x=x0+(x1-x0)*li/(LAYERS.length-1); for(let i=0;i<n;i++){ nodes.push({li,i,x,y:H*.12+H*.76*(i+.5)/n,a:.2}); } });
+  for(let li=0;li<LAYERS.length-1;li++){ const A=nodes.filter(n=>n.li===li), B=nodes.filter(n=>n.li===li+1); A.forEach(a=>B.forEach(b=>edges.push({a,b,w:(Math.sin(a.i*12.9+b.i*78.2+li)*43758.5%1+1)%1}))); }
+}
+function forward(){
+  const inp=[mouse.x,mouse.y,1-mouse.x,Math.abs(mouse.x-mouse.y)];
+  nodes.filter(n=>n.li===0).forEach((n,i)=>n.target=inp[i]);
+  for(let li=1;li<LAYERS.length;li++){
+    nodes.filter(n=>n.li===li).forEach(b=>{ let s=0,c=0; edges.forEach(e=>{ if(e.b===b){ s+=e.a.target*(e.w*2-.8); c++; } }); b.target=1/(1+Math.exp(-(s/c*6)+ (b.i%3-1)*.4)); });
+  }
+  const outs=nodes.filter(n=>n.li===LAYERS.length-1), ex=outs.map(o=>Math.exp(o.target*4)), sum=ex.reduce((a,b)=>a+b,0);
+  return ex.map(v=>v/sum);
+}
+const probsEl=document.getElementById('probs');
+OUT_LABELS.forEach(l=>{ const r=document.createElement('div'); r.className='probs'; r.innerHTML=`<span>${l}</span><span class="track"><span class="fill"></span></span><span class="v">0.00</span>`; probsEl.appendChild(r); });
+const fills=[...probsEl.querySelectorAll('.fill')], vals=[...probsEl.querySelectorAll('.v')];
+function showProbs(p){ p.forEach((v,i)=>{ fills[i].style.width=(v*100).toFixed(1)+'%'; vals[i].textContent=v.toFixed(2); }); }
+function draw(t){
+  ctx.clearRect(0,0,W,H);
+  edges.forEach(e=>{ const s=(e.a.a+e.b.a)/2; ctx.strokeStyle=magma(.15+s*.6); ctx.globalAlpha=.08+s*.28*e.w; ctx.lineWidth=.6+e.w*.9; ctx.beginPath(); ctx.moveTo(e.a.x,e.a.y); ctx.lineTo(e.b.x,e.b.y); ctx.stroke(); });
+  ctx.globalAlpha=1;
+  if(!reduce && Math.random()<.35){ const e=edges[(Math.random()*edges.length)|0]; if(e.a.a>.35) pulses.push({e,p:0}); }
+  pulses=pulses.filter(q=>{ q.p+=.025; if(q.p>=1) return false; const x=q.e.a.x+(q.e.b.x-q.e.a.x)*q.p, y=q.e.a.y+(q.e.b.y-q.e.a.y)*q.p; ctx.fillStyle=magma(.85); ctx.shadowColor=magma(.7); ctx.shadowBlur=10; ctx.beginPath(); ctx.arc(x,y,1.8,0,7); ctx.fill(); ctx.shadowBlur=0; return true; });
+  nodes.forEach(n=>{ n.a += ((n.target??.2)-n.a)*.08; const r=4+n.a*6; ctx.fillStyle=magma(.1+n.a*.9); ctx.shadowColor=magma(n.a); ctx.shadowBlur=n.a*18; ctx.beginPath(); ctx.arc(n.x,n.y,r,0,7); ctx.fill(); ctx.shadowBlur=0; ctx.strokeStyle='rgba(236,232,245,.25)'; ctx.lineWidth=1; ctx.stroke(); });
+}
+let last=performance.now(), frames=0, acc=0; const fpsEl=document.getElementById('fps');
+function loop(now){
+  const dt=now-last; last=now; acc+=dt; frames++; if(acc>500){ fpsEl.textContent=(acc/frames).toFixed(1)+' ms/step'; acc=0; frames=0; }
+  if(!mouse.active){ const s=now/2600; mouse.x=.5+.35*Math.cos(s); mouse.y=.5+.3*Math.sin(s*1.3); }
+  showProbs(forward()); draw(now); requestAnimationFrame(loop);
+}
+const hero=document.querySelector('.hero');
+hero.addEventListener('pointermove',e=>{ const r=hero.getBoundingClientRect(); mouse.x=(e.clientX-r.left)/r.width; mouse.y=(e.clientY-r.top)/r.height; mouse.active=true; });
+hero.addEventListener('pointerleave',()=>mouse.active=false);
+addEventListener('resize',layout);
+layout();
+if(reduce){ showProbs(forward()); nodes.forEach(n=>n.a=n.target??.3); draw(0); fpsEl.textContent='static'; } else requestAnimationFrame(loop);
+
+/* ---------- loss curve ---------- */
+const svg=document.getElementById('lossSvg'), NS='http://www.w3.org/2000/svg';
+const P={l:48,r:20,t:20,b:40}, VW=640, VH=300;
+const yMin=Math.log10(.1), yMax=Math.log10(3);
+const sx=i=>P.l+(VW-P.l-P.r)*i/(EPOCHS.length-1);
+const sy=v=>P.t+(VH-P.t-P.b)*(1-(Math.log10(v)-yMin)/(yMax-yMin));
+function el(n,a,parent=svg){ const e=document.createElementNS(NS,n); for(const k in a) e.setAttribute(k,a[k]); parent.appendChild(e); return e; }
+const defs=el('defs',{}); const g=el('linearGradient',{id:'lg',x1:0,x2:1,y1:0,y2:0},defs);
+[['0%','#b73779'],['60%','#fc8961'],['100%','#fcfdbf']].forEach(([o,c])=>el('stop',{offset:o,'stop-color':c},g));
+const ga=el('linearGradient',{id:'la',x1:0,x2:0,y1:0,y2:1},defs);
+el('stop',{offset:'0%','stop-color':'#b73779','stop-opacity':.35},ga); el('stop',{offset:'100%','stop-color':'#b73779','stop-opacity':0},ga);
+[0.1,0.3,1,3].forEach(v=>{ el('line',{x1:P.l,x2:VW-P.r,y1:sy(v),y2:sy(v),stroke:'#2c2742','stroke-dasharray':'2 4'}); const t=el('text',{x:P.l-8,y:sy(v)+4,'text-anchor':'end'}); t.textContent=v; });
+EPOCHS.forEach((e,i)=>{ const t=el('text',{x:sx(i),y:VH-P.b+20,'text-anchor':'middle'}); t.textContent=e.y; });
+const yl=el('text',{x:12,y:P.t+4}); yl.textContent='loss';
+// noisy curve through epoch points
+const pts=[]; const N=120;
+for(let k=0;k<=N;k++){ const f=k/N*(EPOCHS.length-1), i=Math.min(Math.floor(f),EPOCHS.length-2), u=f-i;
+  const lv=Math.log10(EPOCHS[i].loss)*(1-u)+Math.log10(EPOCHS[i+1].loss)*u; const noise=(k%N? Math.sin(k*2.7)*.035+Math.sin(k*7.3)*.02 : 0)*(1-f/(EPOCHS.length-1)*.6);
+  pts.push([P.l+(VW-P.l-P.r)*k/N, sy(Math.pow(10,lv+noise))]); }
+const d='M'+pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join('L');
+el('path',{d:d+`L${VW-P.r},${VH-P.b}L${P.l},${VH-P.b}Z`,fill:'url(#la)'});
+const curve=el('path',{d,fill:'none',stroke:'url(#lg)','stroke-width':2.4,'stroke-linejoin':'round'});
+const marks=EPOCHS.map((e,i)=>{ const c=el('circle',{cx:sx(i),cy:sy(e.loss),r:4.5,fill:'#0a0913',stroke:magma(.45+i*.1),'stroke-width':2}); return c; });
+const tag=el('g',{}); const tagBg=el('rect',{rx:4,height:22,fill:'#1d1a2e',stroke:'#2c2742'},tag); const tagT=el('text',{class:'lbl'},tag);
+function focusEpoch(i){
+  const e=EPOCHS[i]; tagT.textContent=`${e.e} · loss ${e.loss.toFixed(2)}`;
+  const w=tagT.getComputedTextLength?tagT.getComputedTextLength()+16:150; let x=sx(i)-w/2; x=Math.max(P.l,Math.min(VW-P.r-w,x)); const y=sy(e.loss)-34;
+  tagBg.setAttribute('x',x); tagBg.setAttribute('y',y); tagBg.setAttribute('width',w); tagT.setAttribute('x',x+8); tagT.setAttribute('y',y+15);
+  marks.forEach((m,k)=>{ m.setAttribute('r',k===i?7:4.5); m.setAttribute('fill',k===i?magma(.9):'#0a0913'); });
+  document.querySelectorAll('#epochs li').forEach((li,k)=>li.classList.toggle('on',k===i));
+}
+const ol=document.getElementById('epochs');
+EPOCHS.forEach((e,i)=>{ const li=document.createElement('li'); li.tabIndex=0; li.innerHTML=`<span class="e">${e.e}<br>${e.y}</span><div><h3>${e.t}</h3><p>${e.d}</p></div>`; li.addEventListener('mouseenter',()=>focusEpoch(i)); li.addEventListener('focus',()=>focusEpoch(i)); ol.appendChild(li); });
+focusEpoch(EPOCHS.length-1);
+if(!reduce){ const len=curve.getTotalLength(); curve.style.strokeDasharray=len; curve.style.strokeDashoffset=0;
+  const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ curve.style.transition='none'; curve.style.strokeDashoffset=len; requestAnimationFrame(()=>requestAnimationFrame(()=>{ curve.style.transition='stroke-dashoffset 2.2s cubic-bezier(.3,.7,.2,1)'; curve.style.strokeDashoffset=0; })); io.disconnect(); } }),{threshold:.4}); io.observe(svg); }
+
+/* ---------- checkpoints ---------- */
+function card(p, box){ const a=document.createElement('article'); a.className='ckpt';
+  a.innerHTML=`<div class="top"><span>${p.id}/</span><span>${p.status?`<span style="color:var(--ok)">● ${p.status}</span>`:p.tag}</span></div><h3>${p.name}</h3><p>${p.desc}</p>
+  <div class="metrics">${p.m.map(([v,l])=>`<div class="metric"><b>${v}</b><span>${l}</span></div>`).join('')}</div>
+  <div class="stack">${p.stack.map(s=>`<span>${s}</span>`).join('')}</div>
+  ${p.repo?`<div class="links"><a href="${p.repo}" target="_blank" rel="noopener">view repo →</a><span style="color:var(--muted)">${p.tag}</span></div>`:`<div class="where">${p.where.map(w=>`<span>▸ ${w}</span>`).join('')}</div>`}`;
+  a.addEventListener('pointermove',e=>{ const r=a.getBoundingClientRect(); a.style.setProperty('--mx',(e.clientX-r.left)+'px'); a.style.setProperty('--my',(e.clientY-r.top)+'px'); });
+  box.appendChild(a); }
+PROJECTS.forEach(p=>card(p,document.getElementById('ckpts')));
+PROD.forEach(p=>card(p,document.getElementById('prodCards')));
+
+/* ---------- attention heatmap ---------- */
+const heat=document.getElementById('heat'); heat.appendChild(document.createElement('span'));
+SK_COLS.forEach(c=>{ const s=document.createElement('span'); s.className='col'; s.textContent=c; heat.appendChild(s); });
+const roV=document.getElementById('ro-v'), roT=document.getElementById('ro-t'), roN=document.getElementById('ro-n');
+const note=v=> v>.9?'Core strength. Daily driver.': v>.7?'Shipped to production with it.': v>.4?'Comfortable, used on projects.': v>.2?'Some hands-on experience.':'Mostly curiosity so far.';
+SK_ROWS.forEach((r,i)=>{ const s=document.createElement('span'); s.className='row'; s.textContent=r; heat.appendChild(s);
+  SK[i].forEach((v,j)=>{ const c=document.createElement('button'); c.type='button'; c.className='cell mono'; c.style.background=magma(v); c.style.color=v>.62?'#0a0913':'#ece8f5'; c.style.border='0'; c.style.font='inherit'; c.textContent=v.toFixed(2);
+    c.setAttribute('aria-label',`${r} for ${SK_COLS[j]}: ${v.toFixed(2)}`);
+    const show=()=>{ roV.textContent=v.toFixed(2); roT.textContent=`${r} → ${SK_COLS[j]}`; roN.textContent=note(v); heat.querySelectorAll('.cell').forEach(x=>x.classList.remove('hl')); c.classList.add('hl'); };
+    c.addEventListener('mouseenter',show); c.addEventListener('focus',show); c.addEventListener('click',show); heat.appendChild(c); }); });
+
+/* ---------- REPL ---------- */
+const out=document.getElementById('out'), form=document.getElementById('replForm'), cmd=document.getElementById('cmd');
+const hist=[]; let hi=0;
+function print(html){ out.insertAdjacentHTML('beforeend',html+'\n'); out.scrollTop=out.scrollHeight; }
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const CMDS={
+  help:()=>`<span class="hi">commands</span>\n  whoami      who is this model\n  experience  what's in production\n  education   pretraining data\n  projects    list checkpoints\n  skills      top attention weights\n  train       run one training step\n  predict     predict fit for your team\n  contact     inference endpoint\n  clear       clear the session`,
+  whoami:()=>`<span class="hi">Suhas R</span> · AI/ML Engineer @ PESU Venture Labs · Bangalore\nReal-time CV in production, LLM/RAG systems, AI pipeline orchestration.\nMCA, PES University (2025).\nCurrently training: <span class="p">interrupt</span> (turn-taking for voice agents).`,
+  projects:()=>PROJECTS.map(p=>`<span class="p">${p.id.padEnd(16)}</span>${p.name}  <span class="dim">(${p.m[0][0]} ${p.m[0][1]})</span>`).join('\n')+`\n<span class="dim">type a repo name to open its summary</span>`,
+  skills:()=>{ const all=[]; SK.forEach((r,i)=>r.forEach((v,j)=>all.push([v,SK_ROWS[i],SK_COLS[j]]))); return all.sort((a,b)=>b[0]-a[0]).slice(0,5).map(([v,r,c])=>`${v.toFixed(2)}  ${r} → ${c}`).join('\n'); },
+  contact:()=>`email:  <span class="hi">suhasraghu3@gmail.com</span>\nor scroll down to the inference endpoint.`,
+  predict:()=>{ const p=(0.93+Math.random()*.06).toFixed(3); return `P(good_fit | your_team) = <span class="ok">${p}</span>\n<span class="dim">confidence interval: trust me</span>`; },
+  'sudo hire':()=>`<span class="ok">permission granted.</span> run <span class="p">contact</span> to finish the job.`,
+  clear:()=>{ out.innerHTML=''; return null; },
+  exit:()=>`<span class="dim">nice try. this model is always serving.</span>`,
+};
+let step=0, loss=0.12;
+CMDS.experience=()=>`<span class="hi">AI/ML Engineer — PESU Venture Labs</span>  <span class="dim">Nov 2025 – present</span>\n`+PROD.map(p=>`<span class="ok">● ${p.status}</span> ${p.name}\n  <span class="dim">${p.m.map(([v,l])=>v+' '+l).join(' · ')}</span>`).join('\n');
+CMDS.education=()=>EPOCHS.slice(0,4).map(e=>`<span class="p">${e.y.padEnd(8)}</span>${e.t}`).join('\n');
+CMDS.train=()=>{ step++; loss=Math.max(0.01,loss*(0.8+Math.random()*.15)); const bar='█'.repeat(Math.round(20*(1-loss/0.12)))+'░'.repeat(20-Math.round(20*(1-loss/0.12)));
+  return `step ${step}  [${bar}]  loss=<span class="ok">${loss.toFixed(4)}</span>  lr=3e-4`; };
+PROJECTS.forEach(p=>{ CMDS[p.id.toLowerCase()]=()=>`<span class="hi">${p.name}</span>\n${p.desc}\n<span class="dim">${p.m.map(([v,l])=>v+' '+l).join(' · ')}</span>\n<a href="${p.repo}" target="_blank" rel="noopener">${p.repo}</a>`; });
+function run(raw){ const c=raw.trim(); if(!c) return; hist.push(c); hi=hist.length; print(`<span class="p">&gt;&gt;&gt;</span> ${esc(c)}`);
+  const key=c.toLowerCase().replace(/\(\)$/,''); const f=CMDS[key];
+  if(f){ const r=f(); if(r!==null) print(r); }
+  else print(`<span class="err">NameError:</span> name '${esc(c)}' is not defined. try <span class="p">help</span>`); }
+form.addEventListener('submit',e=>{ e.preventDefault(); run(cmd.value); cmd.value=''; });
+cmd.addEventListener('keydown',e=>{ if(e.key==='ArrowUp'&&hi>0){ hi--; cmd.value=hist[hi]; e.preventDefault(); } if(e.key==='ArrowDown'){ hi=Math.min(hist.length,hi+1); cmd.value=hist[hi]||''; e.preventDefault(); } });
+const chips=document.getElementById('chips');
+['whoami','experience','projects','sudo hire'].forEach(c=>{ const b=document.createElement('button'); b.type='button'; b.textContent=c; b.addEventListener('click',()=>run(c)); chips.appendChild(b); });
+const BOOT=[`<span class="dim">loading weights ............ </span><span class="ok">ok</span>`,`<span class="dim">warming up CUDA kernels .... </span><span class="ok">ok</span>`,`<span class="dim">compiling curiosity ........ </span><span class="ok">ok</span>`,`<span class="hi">suhas-r-v1 ready.</span> type <span class="p">help</span> to begin.`];
+if(reduce) BOOT.forEach(print); else BOOT.forEach((l,i)=>setTimeout(()=>print(l),250+i*380));
+
+/* ---------- copy email ---------- */
+const copyBtn=document.getElementById('copyBtn');
+copyBtn.addEventListener('click',()=>{ const t=document.getElementById('email').textContent;
+  const done=m=>{ copyBtn.textContent=m; setTimeout(()=>copyBtn.textContent='Copy email',1800); };
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>done('Copied'),()=>{ const r=document.createRange(); r.selectNodeContents(document.getElementById('email')); const s=getSelection(); s.removeAllRanges(); s.addRange(r); done('Selected, press Ctrl+C'); }); });
+})();
+</script>
+
+</body>
+</html>
