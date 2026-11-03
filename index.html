@@ -3,498 +3,498 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Suhas R — AI/ML Engineer in Bangalore. Co-founder of Channel Ace (acquihired by PESU Venture Labs). Real-time computer vision in production, LLM/RAG systems and AI pipelines.">
-<title>Suhas R · Model Card</title>
+<meta name="description" content="Suhas R — AI/ML Engineer in Bangalore. Real-time computer vision in production, LLM/RAG systems, AI pipeline orchestration and AI product leadership. Co-founder of Channel Ace (acquihired by PESU Venture Labs).">
+<title>Suhas R · Run page</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=Martian+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: the portfolio is a model card. Hero = a live network you can feed with your cursor,
-   then Training log (loss curve = career), Checkpoints (projects), Attention map (skills), REPL, Inference endpoint (contact).
-   Single dark theme by choice: the palette is matplotlib's magma colormap on an ink ground. */
+/* Layout: an experiment-tracker run page. The career is one training run: header + config, the loss chart as hero,
+   then logs (experience), an eval table (Avera), artifacts (projects), attention (skills), datasets (education), launch (contact).
+   One deliberate light "lab paper" look; viridis colormap for every data mark. */
 :root {
-  --ink: #0a0913;
-  --ink-2: #13111f;
-  --ink-3: #1d1a2e;
-  --line: #2c2742;
-  --fg: #ece8f5;
-  --muted: #9a93b3;
-  --m0: #51127c;   /* magma 0.25 */
-  --m1: #b73779;   /* magma 0.50 */
-  --m2: #fc8961;   /* magma 0.75 */
-  --m3: #fcfdbf;   /* magma 1.00 */
-  --ok: #7ee0b0;
-  --f-display: "Unbounded", "Arial Black", system-ui, sans-serif;
-  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --s-xs: .78rem; --s-sm: .9rem; --s-md: 1.05rem; --s-lg: 1.4rem; --s-xl: clamp(1.8rem, 4vw, 2.6rem); --s-hero: clamp(2.4rem, 8vw, 5.6rem);
-  color-scheme: dark;
+  --paper: #F1F3EE; --panel: #FFFFFF; --ink: #12151C; --muted: #565E6B; --rule: #D8DCD3; --soft: #F7F8F5;
+  --ink-2: #1D212B; --ink-muted: #A9B0BC; --ink-text: #C9CED6; --ink-line: #4A5160;
+  --v0: #440154; --v1: #3B528B; --v2: #21918C; --v3: #5EC962; --v4: #FDE725;
+  --teal-ink: #146B67; --teal-bg: #E3F2EF; --plum-ink: #4B1A6B; --plum-bg: #ECE6F3; --hl: #FDF6B0;
+  --f-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "Martian Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--ink); color: var(--fg); font-family: var(--f-body); font-size: var(--s-md); line-height: 1.6; }
-::selection { background: var(--m1); color: var(--m3); }
-a { color: var(--m2); text-underline-offset: 3px; }
-a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--m2); outline-offset: 3px; }
-.wrap { max-width: 1120px; margin: 0 auto; padding-inline: max(16px, 4vw); }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--panel); }
+a { color: var(--teal-ink); } a:hover { color: var(--v0); }
+h1, h2, h3, h4 { text-wrap: balance; margin: 0; }
+button { font: inherit; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--v2); outline-offset: 3px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, 3vw, env(safe-area-inset-left, 0px)); padding-right: max(16px, 3vw, env(safe-area-inset-right, 0px)); }
 .mono { font-family: var(--f-mono); }
-.eyebrow { font-family: var(--f-mono); font-size: var(--s-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
-h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.05; }
-h2 { font-size: var(--s-xl); font-weight: 600; }
-section { padding-block: clamp(56px, 9vw, 110px); border-top: 1px solid var(--line); }
-.sec-head { display: grid; gap: 10px; margin-bottom: 36px; }
-.sec-head p { color: var(--muted); max-width: 60ch; margin: 0; }
-
-/* ---------- top bar ---------- */
-.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--ink) 82%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
-.bar .id { font-family: var(--f-mono); font-size: var(--s-sm); display: flex; align-items: center; gap: 10px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 10px var(--ok); flex: none; animation: pulse 2s infinite; }
-@keyframes pulse { 50% { opacity: .35; } }
-.bar nav { display: flex; gap: 18px; font-family: var(--f-mono); font-size: var(--s-xs); }
-.bar nav a { color: var(--muted); text-decoration: none; }
-.bar nav a:hover { color: var(--m3); }
-@media (max-width: 720px) { .bar nav { display: none; } }
-
-/* ---------- hero ---------- */
-.hero { position: relative; overflow: hidden; border-top: 0; padding-block: clamp(40px, 7vw, 90px) clamp(40px, 6vw, 70px); }
-#net { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 40px; align-items: end; pointer-events: none; }
-.hero .wrap > * { pointer-events: auto; }
-@media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; } }
-.hero h1 { font-size: var(--s-hero); font-weight: 800; letter-spacing: -.02em; }
-.hero h1 .grad { background: linear-gradient(90deg, var(--m1), var(--m2) 55%, var(--m3)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.hero .tag { font-size: var(--s-lg); color: var(--fg); max-width: 34ch; margin: 18px 0 0; line-height: 1.4; }
-.hero .hint { margin-top: 22px; font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); }
-.hero .hint b { color: var(--m2); font-weight: 600; }
-
-.card-meta { background: color-mix(in srgb, var(--ink-2) 88%, transparent); border: 1px solid var(--line); border-radius: 10px; font-family: var(--f-mono); font-size: var(--s-xs); backdrop-filter: blur(6px); }
-.card-meta header { display: flex; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--muted); }
-.card-meta dl { margin: 0; padding: 12px 14px; display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; }
-.card-meta dt { color: var(--muted); }
-.card-meta dd { margin: 0; color: var(--fg); min-width: 0; overflow-wrap: anywhere; }
-.card-meta .out { padding: 12px 14px; border-top: 1px solid var(--line); display: grid; gap: 7px; }
-.probs { display: grid; grid-template-columns: 7.5em 1fr 3.2em; gap: 8px; align-items: center; }
-.probs .track { height: 6px; background: var(--ink-3); border-radius: 3px; overflow: hidden; }
-.probs .fill { height: 100%; background: linear-gradient(90deg, var(--m0), var(--m1), var(--m2)); width: 0; transition: width .25s ease; }
-.probs .v { text-align: right; color: var(--m3); font-variant-numeric: tabular-nums; }
-
-/* ---------- training log ---------- */
-.loss { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 32px; align-items: start; }
-@media (max-width: 860px) { .loss { grid-template-columns: 1fr; } }
-.chart { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; padding: 14px; overflow-x: auto; }
-.chart svg { display: block; width: 100%; min-width: 520px; height: auto; }
-.chart text { font-family: var(--f-mono); font-size: 11px; fill: var(--muted); }
-.chart .lbl { fill: var(--fg); font-size: 11.5px; }
-.epochs { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-.epochs li { display: grid; grid-template-columns: 5.5em minmax(0, 1fr); gap: 14px; padding: 12px 10px; border-radius: 8px; transition: background .2s; cursor: default; }
-.epochs li.on { background: var(--ink-3); }
-.epochs .e { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--m2); padding-top: 3px; }
-.epochs h3 { font-family: var(--f-body); font-size: var(--s-md); font-weight: 600; line-height: 1.35; }
-.epochs p { margin: 2px 0 0; color: var(--muted); font-size: var(--s-sm); }
-
-/* ---------- checkpoints ---------- */
-.sample-note { font-family: var(--f-mono); font-size: var(--s-xs); color: var(--m2); border: 1px dashed color-mix(in srgb, var(--m2) 55%, transparent); border-radius: 6px; padding: 6px 10px; justify-self: start; }
-.ckpts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 18px; }
-.ckpt { position: relative; background: var(--ink-2); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: grid; gap: 14px; grid-template-rows: auto auto 1fr auto auto; overflow: hidden; transition: border-color .25s, transform .25s; }
-.ckpt:hover { border-color: var(--m1); transform: translateY(-3px); }
-.ckpt::before { content: ""; position: absolute; inset: 0; background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--m1) 18%, transparent), transparent 60%); opacity: 0; transition: opacity .3s; pointer-events: none; }
-.ckpt:hover::before { opacity: 1; }
-.ckpt .top { display: flex; justify-content: space-between; gap: 12px; font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); }
-.ckpt h3 { font-size: 1.15rem; font-weight: 600; }
-.ckpt p { margin: 0; color: var(--muted); font-size: var(--s-sm); }
-.metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.metric { background: var(--ink-3); border-radius: 8px; padding: 8px 10px; min-width: 0; }
-.metric b { display: block; font-family: var(--f-mono); font-size: 1rem; color: var(--m3); font-variant-numeric: tabular-nums; }
-.metric span { font-family: var(--f-mono); font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; }
+.dark { background: var(--ink); color: var(--paper); border-radius: 8px; }
+.chip { display: inline-block; justify-self: start; align-self: flex-start; font-family: var(--f-mono); font-size: 11px; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.chip.teal { background: var(--teal-bg); color: var(--teal-ink); }
+.chip.plum { background: var(--plum-bg); color: var(--plum-ink); }
+.tagpill { font-family: var(--f-mono); font-size: 11px; padding: 3px 8px; border-radius: 4px; background: var(--paper); border: 1px solid var(--rule); }
 .stack { display: flex; flex-wrap: wrap; gap: 6px; }
-.stack span { font-family: var(--f-mono); font-size: .72rem; padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--fg); }
-.prod .ckpt { border-color: color-mix(in srgb, var(--ok) 35%, var(--line)); }
-.prod .metric b { font-size: 1.35rem; }
-.where { display: flex; flex-wrap: wrap; gap: 6px; font-family: var(--f-mono); font-size: .72rem; color: var(--ok); }
-.links { display: flex; gap: 16px; font-family: var(--f-mono); font-size: var(--s-xs); }
+main { display: flex; flex-direction: column; gap: 96px; padding-bottom: 80px; }
+section { scroll-margin-top: 70px; }
+.sec-head { display: flex; flex-direction: column; gap: 8px; max-width: 66ch; }
+.sec-head h2 { font-family: var(--f-display); font-weight: 800; font-size: clamp(36px, 5vw, 56px); line-height: 1; letter-spacing: -.02em; }
+.sec-head p { margin: 0; color: var(--muted); }
+.row { display: flex; flex-wrap: wrap; gap: 20px; }
+.grow { flex: 999 1 600px; min-width: 0; }
+.side { flex: 1 1 300px; min-width: 0; }
 
-/* ---------- attention map ---------- */
-.attn { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 32px; align-items: start; }
-@media (max-width: 860px) { .attn { grid-template-columns: 1fr; } }
-.heat-wrap { overflow-x: auto; }
-.heat { display: grid; grid-template-columns: 9em repeat(6, minmax(52px, 1fr)); gap: 4px; min-width: 480px; font-family: var(--f-mono); font-size: var(--s-xs); }
-.heat .col { color: var(--muted); text-align: center; padding-bottom: 6px; align-self: end; }
-.heat .row { color: var(--fg); align-self: center; padding-right: 8px; }
-.heat .cell { aspect-ratio: 1.5; border-radius: 4px; display: grid; place-items: center; font-variant-numeric: tabular-nums; cursor: crosshair; transition: transform .15s, outline-color .15s; outline: 2px solid transparent; }
-.heat .cell:hover, .heat .cell.hl { transform: scale(1.06); outline-color: var(--m3); }
-.legend { display: flex; align-items: center; gap: 10px; margin-top: 14px; font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); }
-.legend .bar-g { height: 8px; flex: 1; max-width: 220px; border-radius: 4px; background: linear-gradient(90deg, #000004, var(--m0), var(--m1), var(--m2), var(--m3)); }
-.readout { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; padding: 18px; font-family: var(--f-mono); font-size: var(--s-sm); display: grid; gap: 10px; }
-.readout .big { font-family: var(--f-display); font-size: 2.4rem; color: var(--m3); font-variant-numeric: tabular-nums; }
-.readout .q { color: var(--muted); }
+/* top bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--panel) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+.bar .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 24px; }
+.crumb { display: flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 12px; padding: 14px 0; min-width: 0; white-space: nowrap; overflow: hidden; }
+.crumb b { font-weight: 500; }
+.logo { width: 18px; height: 18px; border-radius: 4px; background: linear-gradient(135deg, var(--v0), var(--v2), var(--v4)); flex: none; }
+.running { display: inline-flex; align-items: center; gap: 6px; margin-left: 4px; padding: 2px 9px; border-radius: 999px; background: var(--teal-bg); color: var(--teal-ink); }
+.running i { width: 7px; height: 7px; border-radius: 50%; background: var(--v2); animation: blink 1.6s infinite; }
+@keyframes blink { 50% { opacity: .3; } }
+.bar nav { display: flex; gap: 0 20px; font-family: var(--f-mono); font-size: 12px; overflow-x: auto; scrollbar-width: none; }
+.bar nav::-webkit-scrollbar { display: none; }
+.tab { color: var(--muted); text-decoration: none; padding: 12px 2px; border-bottom: 2px solid transparent; white-space: nowrap; }
+.tab:hover { color: var(--ink); border-bottom-color: var(--v2); }
+.tab.active { color: var(--ink); border-bottom-color: var(--ink); }
+@media (max-width: 900px) { .bar nav { width: 100%; } .crumb .hide-sm { display: none; } }
 
-/* ---------- REPL ---------- */
-.term { background: #07060d; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; box-shadow: 0 30px 80px -40px var(--m1); }
-.term header { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); }
-.term header i { width: 10px; height: 10px; border-radius: 50%; background: var(--ink-3); }
-.term header i:nth-child(1) { background: var(--m1); } .term header i:nth-child(2) { background: var(--m2); } .term header i:nth-child(3) { background: var(--m3); }
-.term header span { margin-left: 8px; }
-#out { height: 340px; overflow-y: auto; padding: 16px; font-family: var(--f-mono); font-size: .86rem; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
-#out .p { color: var(--m2); } #out .ok { color: var(--ok); } #out .dim { color: var(--muted); } #out .hi { color: var(--m3); } #out .err { color: var(--m1); }
-.term form { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-top: 1px solid var(--line); font-family: var(--f-mono); }
-.term form label { color: var(--m2); flex: none; }
-#cmd { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--fg); font: inherit; font-size: .9rem; outline: none; caret-color: var(--m2); }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-.chips button { font-family: var(--f-mono); font-size: var(--s-xs); background: var(--ink-2); color: var(--fg); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
-.chips button:hover { border-color: var(--m2); color: var(--m3); }
+/* header */
+.hero { padding-top: 56px; display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-end; }
+.hero-l { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+.hero h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(64px, 11vw, 148px); line-height: .88; letter-spacing: -.035em; }
+.hero h1 .hlr { background: linear-gradient(transparent 62%, var(--v4) 62%, var(--v4) 92%, transparent 92%); padding: 0 .06em; }
+.lede { margin: 0; font-size: clamp(20px, 2.2vw, 26px); line-height: 1.35; max-width: 30ch; font-weight: 500; }
+.ctas { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 4px; }
+.btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 6px; border: 1.5px solid var(--ink); color: var(--ink); background: transparent; text-decoration: none; font-weight: 600; cursor: pointer; transition: background .15s, color .15s; }
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn.solid { background: var(--ink); color: var(--paper); }
+.btn.solid:hover { background: var(--v1); border-color: var(--v1); }
+.btn.quiet { border-color: var(--rule); }
+.config { flex: 1 1 340px; min-width: 0; font-family: var(--f-mono); font-size: 12px; }
+.config header { display: flex; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--rule); color: var(--muted); }
+.config dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 18px; padding: 16px; margin: 0; }
+.config dt { color: var(--muted); } .config dd { margin: 0; overflow-wrap: anywhere; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); border: 1px solid var(--rule); border-radius: 8px; background: var(--panel); overflow: hidden; margin-top: -56px; }
+.summary div { padding: 18px 20px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin: 0 -1px -1px 0; display: flex; flex-direction: column; gap: 4px; }
+.summary span:first-child { font-family: var(--f-mono); font-size: 11px; color: var(--muted); }
+.summary b { font-family: var(--f-display); font-weight: 700; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.summary span:last-child { font-size: 13px; color: var(--muted); }
 
-/* ---------- endpoint ---------- */
-.endpoint { display: grid; gap: 22px; }
-.endpoint h2 { font-size: clamp(2rem, 6vw, 4rem); font-weight: 800; }
-.req { background: var(--ink-2); border: 1px solid var(--line); border-radius: 10px; padding: 18px; font-family: var(--f-mono); font-size: .88rem; overflow-x: auto; white-space: pre; }
-.req .k { color: var(--m2); } .req .s { color: var(--m3); } .req .c { color: var(--muted); }
-.contact-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-.email { font-family: var(--f-mono); font-size: var(--s-md); background: var(--ink-3); padding: 10px 14px; border-radius: 8px; user-select: all; overflow-wrap: anywhere; }
-.btn { font-family: var(--f-mono); font-size: var(--s-sm); padding: 10px 16px; border-radius: 8px; border: 1px solid var(--m2); background: transparent; color: var(--m3); cursor: pointer; text-decoration: none; }
-.btn.solid { background: linear-gradient(90deg, var(--m1), var(--m2)); color: var(--ink); border-color: transparent; font-weight: 600; }
-.btn:hover { filter: brightness(1.12); }
-footer { padding-block: 30px; border-top: 1px solid var(--line); font-family: var(--f-mono); font-size: var(--s-xs); color: var(--muted); }
-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+/* loss chart */
+.chart-sec { display: flex; flex-direction: column; gap: 20px; margin-top: -40px; }
+.chart-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px; }
+.chart-head h2 { font-family: var(--f-display); font-weight: 700; font-size: 28px; letter-spacing: -.01em; }
+.chart-box { padding: 24px 24px 44px 64px; }
+.plot { position: relative; height: 280px; }
+.plot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.gl { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--rule); }
+.gl span { position: absolute; left: -48px; transform: translateY(-50%); font-family: var(--f-mono); font-size: 11px; color: var(--muted); }
+.mark { position: absolute; transform: translate(-50%, -50%); width: 14px; height: 14px; padding: 0; border-radius: 50%; cursor: pointer; background: var(--panel); border: 3px solid; transition: width .15s, height .15s; }
+.mark:hover { width: 18px; height: 18px; }
+.mark.on { width: 22px; height: 22px; border-color: var(--ink) !important; }
+.xl { position: absolute; bottom: -30px; transform: translateX(-50%); font-family: var(--f-mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
+.epoch-card { padding: 24px; display: flex; flex-direction: column; gap: 14px; }
+.epoch-card .meta { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 12px; color: var(--ink-muted); }
+.epoch-card h3 { font-family: var(--f-display); font-weight: 700; font-size: 26px; line-height: 1.1; }
+.epoch-card p { margin: 0; color: var(--ink-text); font-size: 15px; }
+.dots { margin-top: auto; display: flex; gap: 6px; }
+.dots button { flex: 1; height: 6px; min-width: 0; padding: 0; border: 0; border-radius: 3px; cursor: pointer; background: #3A404C; }
+.dots button.on { background: var(--v4); }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before { animation: none !important; transition: none !important; }
-  html { scroll-behavior: auto; }
-}
+/* logs */
+.role { display: flex; flex-wrap: wrap; gap: 24px 48px; padding: 28px 0; border-top: 2px solid var(--ink); }
+.role-meta { flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.role-meta h3 { font-family: var(--f-display); font-weight: 700; font-size: 30px; line-height: 1.05; }
+.role-meta .when { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.log { flex: 999 1 560px; min-width: 0; overflow: hidden; }
+.log div { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 16px; padding: 14px 18px; border-bottom: 1px solid var(--rule); font-size: 15px; }
+.log div:last-child { border-bottom: 0; }
+.log span:first-child { font-family: var(--f-mono); font-size: 11px; color: var(--teal-ink); padding-top: 3px; }
+@media (max-width: 520px) { .log div { grid-template-columns: 1fr; gap: 4px; } }
+.sub-head { display: flex; justify-content: space-between; align-items: baseline; padding-top: 12px; }
+.sub-head h3 { font-family: var(--f-display); font-weight: 700; font-size: 24px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 20px; }
+.card { padding: 22px; display: flex; flex-direction: column; gap: 14px; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.card:hover { transform: translateY(-2px); border-color: var(--ink); box-shadow: 4px 4px 0 var(--ink); }
+.card .top { display: flex; justify-content: space-between; gap: 10px; font-family: var(--f-mono); font-size: 11px; color: var(--muted); }
+.card h4 { font-family: var(--f-display); font-weight: 700; font-size: 22px; line-height: 1.1; }
+.card p { margin: 0; color: var(--muted); font-size: 14px; flex: 1; }
+.metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.metrics div { background: var(--paper); padding: 10px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.metrics b { font-family: var(--f-mono); font-weight: 500; font-size: 15px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.prod .metrics b { font-family: var(--f-display); font-weight: 700; font-size: 22px; line-height: 1.1; }
+.metrics span { font-family: var(--f-mono); font-size: 10px; color: var(--muted); text-transform: uppercase; }
+.where { font-family: var(--f-mono); font-size: 11px; color: var(--teal-ink); display: flex; flex-wrap: wrap; gap: 4px 14px; }
+
+/* eval table */
+.tbl { overflow-x: auto; }
+.tbl-in { min-width: 560px; }
+.tr { display: grid; gap: 16px; padding: 16px 18px; border-bottom: 1px solid var(--rule); align-items: start; font-size: 14px; }
+.tr:last-child { border-bottom: 0; }
+.tr.th { padding: 12px 18px; border-bottom: 2px solid var(--ink); font-family: var(--f-mono); font-size: 11px; color: var(--muted); }
+.mod .tr { grid-template-columns: 40px minmax(0, 1.3fr) 110px minmax(0, 2fr); }
+.ds .tr { grid-template-columns: 110px minmax(0, 2fr) minmax(0, 1.2fr) 170px; align-items: baseline; }
+.ds .tbl-in { min-width: 640px; }
+.listbox { padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.listbox div { display: flex; gap: 10px; font-size: 14px; }
+.listbox i { font-style: normal; font-family: var(--f-mono); }
+
+/* filters */
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.filters button { min-height: 40px; padding: 0 14px; border-radius: 999px; font-weight: 500; font-size: 13px; cursor: pointer; border: 1.5px solid var(--rule); background: var(--panel); color: var(--ink); }
+.filters button span { opacity: .6; }
+.filters button.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+/* heatmap */
+.heat-box { padding: 20px; overflow-x: auto; }
+.heat { min-width: 560px; display: grid; grid-template-columns: 170px repeat(6, minmax(0, 1fr)); gap: 3px; font-family: var(--f-mono); font-size: 11px; }
+.heat .col { text-align: center; color: var(--muted); padding-bottom: 6px; }
+.heat .rn { align-self: center; }
+.cell { height: 34px; padding: 0; border: 0; border-radius: 3px; cursor: crosshair; font: 500 11px var(--f-mono); font-variant-numeric: tabular-nums; }
+.cell:hover, .cell.sel { outline: 2px solid var(--ink); outline-offset: 1px; position: relative; z-index: 1; }
+.legend { display: flex; align-items: center; gap: 10px; padding-top: 12px; font-family: var(--f-mono); font-size: 11px; color: var(--muted); }
+.legend i { flex: 0 1 220px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--v0), var(--v1), var(--v2), var(--v3), var(--v4)); }
+.readout { padding: 24px; display: flex; flex-direction: column; gap: 10px; font-family: var(--f-mono); font-size: 13px; position: sticky; top: 80px; }
+.readout .k { color: var(--ink-muted); }
+.readout b { font-family: var(--f-display); font-weight: 800; font-size: 72px; line-height: 1; font-variant-numeric: tabular-nums; }
+.readout .n { color: var(--ink-text); font-family: var(--f-body); font-size: 15px; }
+@media (max-width: 900px) { .readout { position: static; } }
+.vocab { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px; }
+.vg { display: flex; flex-direction: column; gap: 12px; padding: 18px; border-radius: 8px; border: 1px solid var(--rule); background: var(--soft); }
+.vg.hot { border-color: var(--ink); background: var(--hl); }
+.vg h3 { font-family: var(--f-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; font-weight: 500; }
+.vg .stack span { font-size: 13px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--rule); background: var(--panel); }
+
+/* launch */
+.launch { border-radius: 12px; padding: clamp(28px, 5vw, 56px); display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-end; scroll-margin-top: 70px; }
+.launch h2 { font-family: var(--f-display); font-weight: 800; font-size: clamp(44px, 7vw, 88px); line-height: .92; letter-spacing: -.03em; }
+.launch h2 em { font-style: normal; color: var(--v4); }
+.term { font-family: var(--f-mono); font-size: 13px; line-height: 1.8; background: var(--ink-2); border-radius: 8px; padding: 16px 18px; overflow-x: auto; white-space: pre; color: var(--ink-text); }
+.term .c { color: #7A8291; } .term .p { color: var(--v3); } .term .s { color: var(--v4); }
+.email { font-family: var(--f-mono); font-size: 16px; padding: 12px 14px; background: var(--ink-2); border-radius: 6px; user-select: all; overflow-wrap: anywhere; }
+.launch .btn { border-color: var(--ink-line); color: var(--paper); }
+.launch .btn:hover { background: var(--paper); color: var(--ink); }
+.launch .btn.yel { background: var(--v4); border-color: var(--v4); color: var(--ink); }
+footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-family: var(--f-mono); font-size: 11px; color: var(--muted); margin-top: -56px; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } html { scroll-behavior: auto; } }
 </style>
 </head>
 <body>
 
-
 <div class="bar">
   <div class="wrap">
-    <div class="id"><span class="dot" aria-hidden="true"></span><span>suhas-r-v1 · status: <span style="color:var(--ok)">serving</span></span></div>
+    <div class="crumb"><span class="logo" aria-hidden="true"></span><span class="muted hide-sm">suhasraghu12 /</span><b class="hide-sm">portfolio</b><span class="muted">/ runs /</span><b>suhas-r-v1</b><span class="running"><i></i>running</span></div>
     <nav aria-label="Sections">
-      <a href="#log">training_log</a><a href="#prod">production</a><a href="#checkpoints">checkpoints</a><a href="#attention">attention</a><a href="#repl">repl</a><a href="#endpoint">endpoint</a>
+      <a class="tab" href="#overview">overview</a><a class="tab" href="#logs">logs</a><a class="tab" href="#eval">product</a><a class="tab" href="#artifacts">artifacts</a><a class="tab" href="#attention">attention</a><a class="tab" href="#datasets">datasets</a><a class="tab" href="#launch">contact</a>
     </nav>
   </div>
 </div>
 
-<header class="hero">
-  <canvas id="net" aria-hidden="true"></canvas>
-  <div class="wrap">
-    <div>
-      <div class="eyebrow">Model card · AI / ML Engineer · PESU Venture Labs</div>
-      <h1 style="margin-top:14px">Suhas <span class="grad">R</span></h1>
-      <p class="tag">I ship computer vision that runs on live traffic cameras, and LLM systems that show their evidence.</p>
-      <p class="hint">move your cursor · it's the <b>input tensor</b> for the network behind this text</p>
-    </div>
-    <aside class="card-meta" aria-label="Model details">
-      <header><span>model_card.yaml</span><span id="fps">— ms/step</span></header>
-      <dl>
-        <dt>architecture</dt><dd>human, caffeine-augmented</dd>
-        <dt>base</dt><dd>MCA, PES University</dd>
-        <dt>prior</dt><dd>Co-founder, Channel Ace (acquihired)</dd>
-        <dt>fine-tuned on</dt><dd>CV · LLM/RAG · AI pipelines · forecasting</dd>
-        <dt>deployed at</dt><dd>Mysore Traffic Authority, Kempegowda Intl. Airport</dd>
-        <dt>region</dt><dd>Bangalore, India</dd>
-        <dt>license</dt><dd>open to work</dd>
-      </dl>
-      <div class="out" id="probs" aria-label="Live output probabilities">
-        <div class="eyebrow" style="margin-bottom:2px">softmax(output)</div>
-      </div>
-    </aside>
-  </div>
-</header>
+<main class="wrap">
 
-<main>
-<section id="log">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">01 · training_log</div>
-      <h2>Loss went down. Mostly.</h2>
-      <p>My career as a training run, from a physics and maths degree to production ML. Hover an epoch to find it on the curve.</p>
-    </div>
-    <div class="loss">
-      <div class="chart"><svg id="lossSvg" viewBox="0 0 640 300" role="img" aria-label="Training loss curve falling from 2.4 in 2019 to 0.12 in 2026"></svg></div>
-      <ol class="epochs" id="epochs"></ol>
+<section id="overview" class="hero">
+  <div class="hero-l">
+    <div class="eyebrow">Run summary · AI / ML Engineer · PESU Venture Labs · Bangalore</div>
+    <h1>Suhas <span class="hlr">R</span></h1>
+    <p class="lede">I ship computer vision that runs on live traffic cameras, and LLM systems that show their evidence.</p>
+    <p class="muted" style="margin:0;max-width:56ch">I also turn fuzzy business problems into technical direction: requirements, trade-offs, and what to build first.</p>
+    <div class="ctas">
+      <a class="btn solid" href="#launch">Get in touch</a>
+      <a class="btn" href="resume.pdf" download>Download résumé</a>
+      <a class="btn quiet" href="https://github.com/suhasraghu12" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
+  <aside class="config panel" aria-label="Profile details">
+    <header><span>config.yaml</span><span>8 keys</span></header>
+    <dl>
+      <dt>architecture</dt><dd>human, caffeine-augmented</dd>
+      <dt>base</dt><dd>MCA, PES University</dd>
+      <dt>prior</dt><dd>Co-founder, Channel Ace</dd>
+      <dt>fine_tuned_on</dt><dd>CV · LLM/RAG · agents · forecasting</dd>
+      <dt>adapters</dt><dd>requirements · roadmaps · stakeholders</dd>
+      <dt>deployed_at</dt><dd>Mysore Traffic Authority, Kempegowda Intl. Airport</dd>
+      <dt>region</dt><dd>Bangalore, IN</dd>
+      <dt>license</dt><dd style="color:var(--teal-ink);font-weight:500">open to work</dd>
+    </dl>
+  </aside>
 </section>
 
-<section id="prod">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">02 · in production</div>
-      <h2>Shipped, deployed, acquihired</h2>
-      <p>From co-founding Channel Ace to PESU Venture Labs, which acquihired our team. I've been an AI/ML Engineer there since November 2025.</p>
-    </div>
-    <div class="ckpts prod" id="prodCards"></div>
-  </div>
-</section>
+<div class="summary" id="summary" aria-label="Highlights"></div>
 
-<section id="checkpoints">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">03 · checkpoints</div>
-      <h2>Side projects</h2>
-      <p>Open-source work outside the day job. Numbers come from each repo, and every card links to the code.</p>
-          </div>
-    <div class="ckpts" id="ckpts"></div>
+<section class="chart-sec" aria-label="Career loss curve">
+  <div class="chart-head">
+    <h2>train/loss <span class="muted" style="font-weight:500">· 2019 → 2026</span></h2>
+    <span class="mono muted" style="font-size:12px">log scale · tap an epoch</span>
   </div>
-</section>
-
-<section id="attention">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">04 · attention weights</div>
-      <h2>Where my attention goes</h2>
-      <p>Skills as an attention map: rows are tools, columns are problem domains. Brighter means I've used it there more, at work and in my projects.</p>
-    </div>
-    <div class="attn">
-      <div>
-        <div class="heat-wrap"><div class="heat" id="heat"></div></div>
-        <div class="legend"><span>0.0</span><span class="bar-g"></span><span>1.0</span></div>
-      </div>
-      <div class="readout" id="readout" aria-live="polite">
-        <div class="q">attn[query, key]</div>
-        <div class="big" id="ro-v">0.98</div>
-        <div id="ro-t">YOLOv11 · OpenCV → Vision</div>
-        <div class="q" id="ro-n">Hover any cell to read its weight.</div>
+  <div class="row" style="align-items:stretch">
+    <div class="grow panel chart-box">
+      <div class="plot" id="plot">
+        <svg viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="vstroke" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#440154"/><stop offset=".35" stop-color="#3B528B"/><stop offset=".6" stop-color="#21918C"/><stop offset=".85" stop-color="#5EC962"/><stop offset="1" stop-color="#C8DD2A"/></linearGradient>
+            <linearGradient id="vfill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#21918C" stop-opacity=".18"/><stop offset="1" stop-color="#21918C" stop-opacity="0"/></linearGradient>
+          </defs>
+          <path id="area" fill="url(#vfill)"/>
+          <path id="curve" fill="none" stroke="url(#vstroke)" stroke-width="3" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+        </svg>
       </div>
     </div>
+    <div class="side dark epoch-card" aria-live="polite">
+      <div class="meta"><span id="ec-e"></span><span id="ec-l"></span></div>
+      <h3 id="ec-t"></h3>
+      <p id="ec-d"></p>
+      <div class="dots" id="dots"></div>
+    </div>
   </div>
 </section>
 
-<section id="repl">
-  <div class="wrap">
+<section id="logs" style="display:flex;flex-direction:column;gap:28px">
+  <div class="sec-head">
+    <span class="eyebrow">logs · experience</span>
+    <h2>Where the run happened</h2>
+    <p>From co-founding Channel Ace to PESU Venture Labs, which acquihired our team.</p>
+  </div>
+  <div id="roles"></div>
+  <div class="sub-head"><h3>Serving in production</h3><span class="mono muted" style="font-size:12px">3 systems</span></div>
+  <div class="cards prod" id="prod"></div>
+</section>
+
+<section id="eval" style="display:flex;flex-direction:column;gap:28px">
+  <div class="sec-head">
+    <span class="eyebrow">eval · ai product leadership</span>
+    <h2>Avera Hotels, from client brief to module plan</h2>
+    <p>An AI hospitality platform to unify guest preferences, bookings, conversation insights and operations. I coordinated the team, talked with clients and stakeholders, and turned open questions into module requirements and priorities.</p>
+  </div>
+  <div class="row" style="align-items:flex-start">
+    <div class="grow panel tbl mod"><div class="tbl-in" id="modules">
+      <div class="tr th"><span>#</span><span>module</span><span>status</span><span>early validation</span></div>
+    </div></div>
+    <div class="side" style="display:flex;flex-direction:column;gap:20px">
+      <div class="panel listbox" id="deps"><span class="mono muted" style="font-size:11px">open_dependencies · 4</span></div>
+      <div class="panel listbox" id="risks"><span class="mono muted" style="font-size:11px">risks_considered · 6</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="artifacts" style="display:flex;flex-direction:column;gap:24px">
+  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px">
     <div class="sec-head">
-      <div class="eyebrow">05 · interactive session</div>
-      <h2>Query the model</h2>
-      <p>A working REPL. Type <span class="mono" style="color:var(--m2)">help</span>, or tap a command.</p>
+      <span class="eyebrow">artifacts · side projects</span>
+      <h2>Open-source checkpoints</h2>
+      <p>Numbers come from each repo, and every card links to the code.</p>
     </div>
-    <div class="term">
-      <header><i></i><i></i><i></i><span>python3 -i suhas.py</span></header>
-      <div id="out" role="log" aria-live="polite"></div>
-      <form id="replForm" autocomplete="off">
-        <label for="cmd">&gt;&gt;&gt;</label>
-        <input id="cmd" type="text" spellcheck="false" placeholder="try: projects" aria-label="REPL command">
-      </form>
-    </div>
-    <div class="chips" id="chips"></div>
+    <div class="filters" role="group" aria-label="Filter projects" id="filters"></div>
   </div>
+  <div class="cards" id="projects"></div>
 </section>
 
-<section id="endpoint">
-  <div class="wrap endpoint">
-    <div class="eyebrow">06 · inference endpoint</div>
-    <h2>Send a request.</h2>
-<div class="req"><span class="c"># p50 reply latency: under 24h</span>
-<span class="k">POST</span> /v1/hire
-{
-  <span class="k">"role"</span>: <span class="s">"ML Engineer"</span>,
-  <span class="k">"location"</span>: <span class="s">"Bangalore"</span>,
-  <span class="k">"team"</span>: <span class="s">"your team"</span>,
-  <span class="k">"temperature"</span>: 0.2
-}</div>
-    <div class="contact-row">
-      <span class="email" id="email">suhasraghu3@gmail.com</span>
-      <button class="btn solid" id="copyBtn" type="button">Copy email</button>
+<section id="attention" style="display:flex;flex-direction:column;gap:28px">
+  <div class="sec-head">
+    <span class="eyebrow">attention · skills</span>
+    <h2>Where my attention goes</h2>
+    <p>Rows are tools, columns are problem domains. Brighter means more use, at work and in projects.</p>
+  </div>
+  <div class="row" style="align-items:flex-start">
+    <div class="grow panel heat-box">
+      <div class="heat" id="heat"></div>
+      <div class="legend"><span>0.0</span><i></i><span>1.0</span></div>
+    </div>
+    <div class="side dark readout" aria-live="polite">
+      <span class="k">attn[query, key]</span>
+      <b id="ro-v"></b>
+      <span id="ro-t"></span>
+      <span class="n" id="ro-n"></span>
+    </div>
+  </div>
+  <div class="vocab" id="vocab"></div>
+</section>
+
+<section id="datasets" style="display:flex;flex-direction:column;gap:24px">
+  <div class="sec-head">
+    <span class="eyebrow">datasets · education &amp; certifications</span>
+    <h2>Pretraining data</h2>
+  </div>
+  <div class="panel tbl ds"><div class="tbl-in" id="creds">
+    <div class="tr th"><span>split</span><span>dataset</span><span>source</span><span>span</span></div>
+  </div></div>
+</section>
+
+<section id="launch" class="dark launch">
+  <div style="flex:999 1 460px;min-width:0;display:flex;flex-direction:column;gap:18px">
+    <span class="eyebrow" style="color:var(--ink-muted)">launch · contact</span>
+    <h2>Start a new <em>run.</em></h2>
+<div class="term"><span class="c"># p50 reply latency: under 24h</span>
+<span class="p">$</span> python hire.py \
+    --role <span class="s">"ML Engineer"</span> \
+    --location <span class="s">"Bangalore"</span> \
+    --team <span class="s">"your team"</span></div>
+  </div>
+  <div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:12px">
+    <span class="email" id="email">suhasraghu3@gmail.com</span>
+    <div class="ctas" style="padding:0">
+      <button class="btn yel" id="copyBtn" type="button">Copy email</button>
+      <a class="btn" href="resume.pdf" download>Résumé</a>
       <a class="btn" href="https://github.com/suhasraghu12" target="_blank" rel="noopener">GitHub</a>
       <a class="btn" href="https://www.linkedin.com/in/suhasraghu12" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </div>
 </section>
-</main>
 
-<footer><div class="wrap"><span>suhas-r-v1 · checkpoint 2026.09 · Bangalore</span><span>no GPUs were harmed</span></div></footer>
+<footer><span>suhas-r-v1 · checkpoint 2026.11 · Bangalore</span><span>no GPUs were harmed</span></footer>
+</main>
 
 <script>
 (() => {
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-/* ---------- magma colormap ---------- */
-const MAGMA = [[0,0,4],[28,16,68],[79,18,123],[129,37,129],[181,54,122],[229,80,100],[251,135,97],[254,194,135],[252,253,191]];
-function magma(t){ t=Math.max(0,Math.min(1,t)); const x=t*(MAGMA.length-1), i=Math.floor(x), f=x-i; const a=MAGMA[i], b=MAGMA[Math.min(i+1,MAGMA.length-1)]; return `rgb(${a.map((v,k)=>Math.round(v+(b[k]-v)*f)).join(',')})`; }
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const V = [[68,1,84],[72,40,120],[62,74,137],[49,104,142],[38,130,142],[31,158,137],[53,183,121],[109,205,89],[180,222,44],[253,231,37]];
+function vir(t){ t=Math.max(0,Math.min(1,t)); const x=t*(V.length-1), i=Math.floor(x), f=x-i, a=V[i], b=V[Math.min(i+1,V.length-1)]; return `rgb(${a.map((v,k)=>Math.round(v+(b[k]-v)*f)).join(',')})`; }
 
 /* ---------- content ---------- */
-const GH = 'https://github.com/suhasraghu12/';
-const PROJECTS = [
-  { id:'interrupt', tag:'voice agents', status:'in progress', name:'Interrupt: turn-taking for voice agents', desc:'A real-time voice agent with an explicit, measurable turn-taking module, benchmarked against a fixed-silence baseline and Pipecat\'s smart-turn model. Every turn is traced with per-stage latency.', m:[['3-arm','benchmark'],['<600ms','p50 target'],['$0','local stack']], stack:['Pipecat','LiveKit','faster-whisper','Silero VAD','React'], repo:GH+'interrupt' },
-  { id:'lexiguard_ai', tag:'legal RAG', name:'LexiGuard AI', desc:'Legal RAG over statutes and contracts. Fuses BGE dense vectors with BM25 through reciprocal rank fusion, rewrites layman queries into legal terms, and audits every answer with an LLM judge.', m:[['k=60','RRF fusion'],['top-6','cited chunks'],['0–100%','grounding score']], stack:['ChromaDB','BGE','BM25','Gemini 2.5','Streamlit'], repo:GH+'lexiguard_ai' },
-  { id:'time_series', tag:'deep learning', name:'Transformer vs LSTM forecasting', desc:'Multi-head self-attention written from scratch and pitted against a parameter-matched LSTM on the ETTh1 grid benchmark. The attention model\'s lead grows as the lookback window grows.', m:[['0.1905','MAE @192'],['−16%','error vs LSTM'],['102K','params each']], stack:['PyTorch','Self-attention','ETTh1'], repo:GH+'time_series' },
-  { id:'youtube_chatbot', tag:'multimodal RAG', name:'YouTube video Q&A', desc:'Paste a link and ask questions about the video. Audio is transcribed with Whisper, chunked and embedded into Pinecone, and answered by GPT-4o-mini with timestamp-level sources and conversational memory.', m:[['top-5','retrieved'],['1000/200','chunk/overlap'],['5-turn','memory']], stack:['Whisper','LangChain','Pinecone','FastAPI','Docker'], repo:GH+'youtube_chatbot' },
-  { id:'dalal_bot', tag:'anomaly detection', name:'DalalBot', desc:'Real-time NSE stock monitor with unsupervised anomaly detection and price alerts. A background scheduler sweeps targets and fires each alert exactly once over email and Telegram.', m:[['2.5%','contamination'],['3.0σ','z-score'],['2','alert channels']], stack:['Isolation Forest','yfinance','APScheduler','SQLite','Plotly'], repo:GH+'dalal_bot' },
-  { id:'Scene-Detection', tag:'computer vision', name:'Cinematic scene change detector', desc:'Finds scene cuts in video using HSV histogram correlation or frame differencing, with live threshold tuning on cached signals and a keyframe film strip for every cut.', m:[['2','algorithms'],['0–100','cut score'],['4','video formats']], stack:['OpenCV','NumPy','Streamlit'], repo:GH+'Scene-Detection' },
-];
-const PROD = [
-  { id:'channel-ace', status:'acquihired', name:'Channel Ace: FranchiseKonnect', desc:'Co-founded in my final year of MCA. An AI franchise platform that matches owners and would-be franchisees to business models that fit their investment capacity, skills, time and location, and shows what the revenue could look like. I led the ML and data science side. PESU Venture Labs later acquihired the team.', m:[['14','business domains'],['4+','matching factors'],['1','acquihire']], stack:['Co-founder','ML / data science','Pattern mining','Recommendation','Location demographics'], where:['Business-model matching','Cross-promotion from local demographics'] },
-  { id:'traffic-vision', status:'serving', name:'Traffic violation detection & ANPR', desc:'Real-time system on live camera streams that detects helmet, seatbelt, mobile-use, triple-riding and parking violations, then reads the number plate.', m:[['~95%','ANPR accuracy'],['~90%','violation acc.'],['5','violation types']], stack:['YOLOv11','PyTorch','OpenCV','PARSeq OCR','FastAPI','SQL'], where:['Mysore Traffic Authority','Kempegowda Intl. Airport'] },
-  { id:'research-pipeline', status:'serving', name:'Multimodal AI research pipeline', desc:'Takes papers, transcripts, images, datasets and web sources through dependent analysis stages, ending in a Go / No-Go / Pivot call. Autopilot resolves the stage graph; researchers can rerun, iterate or branch any stage.', m:[['6','analysis stages'],['3','rerun·iterate·branch'],['S3 + web','grounding']], stack:['LLM orchestration','Amazon S3','Web search','Multimodal','Evaluation'], where:['TRL','market','adversarial review'] },
-];
-const EPOCHS = [
+const SUMMARY = [['anpr_accuracy','0.95','live traffic cameras'],['violation_accuracy','0.90','5 violation types'],['deployments','2','Mysore · BLR airport'],['acquihires','1','Channel Ace → PESU VL'],['oss_repos','6','linked below']];
+const EP = [
   { e:'epoch 0', y:"May '19", loss:2.4, t:'B.Sc. Physics, Maths, CS', d:"Yuvaraja's College, Mysore. Linear algebra and probability, the weights everything else loads from." },
-  { e:'epoch 1', y:"Oct '22", loss:1.5, t:'Data analytics, certified', d:'Statistics, SQL, Python and NLP basics. First real datasets.' },
+  { e:'epoch 1', y:"Oct '22", loss:1.5, t:'Data analytics, certified', d:'PES University certification in statistics, SQL, Python, big data and NLP basics. First real datasets.' },
   { e:'epoch 2', y:"Oct '23", loss:0.9, t:'MCA at PES University', d:'Deep learning, CNNs and RNNs, and the move from notebooks to systems. Graduated June 2025.' },
-  { e:'epoch 3', y:"'24–'25", loss:0.55, t:'Co-founded Channel Ace', d:'Final year of MCA. Led ML on FranchiseKonnect: franchise data from 14 domains turned into business-model recommendations.' },
-  { e:'epoch 4', y:"Nov '25", loss:0.28, t:'Acquihired: AI/ML Engineer, PESU Venture Labs', d:'The team joined PESU Venture Labs. Since then: traffic violation detection and ANPR, and a multi-stage AI research pipeline.' },
+  { e:'epoch 3', y:"'24–'25", loss:0.55, t:'Co-founded Channel Ace', d:'Final year of MCA. Led ML on FranchiseKonnect, turning franchise data from 14 domains into business-model recommendations.' },
+  { e:'epoch 4', y:"Nov '25", loss:0.28, t:'Acquihired: AI/ML Engineer, PESU Venture Labs', d:'Traffic violation detection and ANPR, a multimodal research copilot, and product leadership on Avera Hotels.' },
   { e:'epoch 5', y:'2026', loss:0.12, t:'In production, still training', d:'Systems live at two sites. Building Interrupt, a turn-taking benchmark for voice agents.' },
 ];
-const SK_ROWS = ['PyTorch','TensorFlow · Keras','YOLOv11 · OpenCV','LangChain · RAG','Pinecone · FAISS · Chroma','Whisper · Pipecat','scikit-learn · Prophet','FastAPI · SQL'];
-const SK_COLS = ['NLP','LLM','Speech','Vision','Time series','Serving'];
-const SK = [
-  [.55,.35,.40,.90,.97,.35],
-  [.40,.10,.10,.55,.80,.30],
-  [.05,.05,.05,.98,.10,.85],
-  [.70,.96,.25,.10,.05,.50],
-  [.50,.93,.10,.05,.05,.55],
-  [.45,.40,.95,.05,.05,.60],
-  [.40,.10,.05,.20,.92,.35],
-  [.30,.75,.60,.85,.55,.96],
+const ROLES = [
+  { co:'PESU Venture Labs', title:'AI/ML Engineer', when:'Nov 2025 – present · Bangalore', chip:['teal','● serving'], lines:[
+    ['deploy','Built and deployed real-time traffic violation detection and ANPR (YOLOv11, OpenCV, PyTorch, PARSeq OCR, FastAPI, SQL) for helmet, seatbelt, mobile-use, triple-riding and parking violations. About 95% ANPR and 90% violation accuracy, live at Mysore Traffic Authority and Kempegowda International Airport.'],
+    ['build','Developed a multimodal AI research copilot that turns papers, transcripts, images, datasets and web sources into research-gap analysis, technology-readiness assessments, market insights, bottleneck analysis, adversarial reviews and Go / No-Go / Pivot calls.'],
+    ['design','Designed a dependency-aware orchestration system with ordered stage execution and Autopilot, plus Rerun, Iterate and Branch workflows for feedback-driven refinement.'],
+    ['ingest','Built multimodal ingestion and web-grounding on Amazon S3: PDF text and link extraction, image understanding, live web search, structured evaluation and consolidated reports.'],
+    ['eval','Developed and evaluated forecasting and clustering workflows with Prophet, LSTM, K-Means, DBSCAN, scikit-learn, TensorFlow and Pandas.'] ] },
+  { co:'Channel Ace', title:'Co-founder · ML & data science lead', when:'2024 – 2025 · during MCA', chip:['plum','◆ acquihired'], lines:[
+    ['found','Co-founded the company in my final year of MCA and built FranchiseKonnect, an AI platform matching owners and would-be franchisees to business models that fit their investment, skills, time and location.'],
+    ['model','Led ML and data science: franchise data from 14 business domains, pattern mining and recommendation across 4+ matching factors, with revenue projections for each match.'],
+    ['exit','Used local demographics for cross-promotion suggestions. PESU Venture Labs acquihired the team in 2025.'] ] },
+];
+const PROD = [
+  { id:'traffic-vision', status:'serving', name:'Traffic violation detection & ANPR', desc:'Real-time system on live camera streams that detects five violation types, then reads the number plate.', m:[['~95%','ANPR acc.'],['~90%','violation acc.'],['5','violation types']], stack:['YOLOv11','PyTorch','OpenCV','PARSeq OCR','FastAPI','SQL'], where:['Mysore Traffic Authority','Kempegowda Intl. Airport'] },
+  { id:'research-copilot', status:'serving', name:'Multimodal AI research copilot', desc:'Dependent analysis stages from mixed sources to a Go / No-Go / Pivot call. Autopilot resolves the stage graph; researchers rerun, iterate or branch any stage.', m:[['6','stages'],['3','refine modes'],['S3+web','grounding']], stack:['LLM orchestration','Amazon S3','PDF extraction','Web search','Evaluation'], where:['research gaps','TRL','market','adversarial review'] },
+  { id:'forecast-cluster', status:'evaluated', name:'Forecasting & clustering workflows', desc:'Classical and deep forecasters, density- and centroid-based clustering, developed and evaluated side by side.', m:[['2','forecasters'],['2','clusterers'],['TF+sk','stack']], stack:['Prophet','LSTM','K-Means','DBSCAN','scikit-learn','Pandas'], where:['forecasting','segmentation'] },
+];
+const MODULES = [
+  ['01','Guest recognition','teal','prototyped','Image, video and live-camera face-recognition pipelines, with manual fallback for recognition failures.'],
+  ['02','Audio conversation intelligence','teal','prototyped','Transcription and insight extraction, with manual guest mapping for now.'],
+  ['03','Booking-data enrichment','teal','prototyped','A mock OTA pipeline consolidating booking signals into guest profiles.'],
+  ['04','Pre-arrival engagement','plum','defined','Technical approach defined and aligned with the guest workflow.'],
+  ['05','Staff-facing guest profiles','plum','defined','One profile bringing recognition, conversation and booking signals to staff.'],
+];
+const DEPS = ['PMS / booking API access','Audio-device selection','Guest-to-conversation mapping','Data quality'];
+const RISKS = ['Recognition failures','Incomplete guest data','API availability','Staff adoption','Privacy','Manual fallback workflows'];
+const GH = 'https://github.com/suhasraghu12/';
+const CAT = { rag:'#3B528B', vision:'#146B67', speech:'#440154', ts:'#2E7D4F' };
+const PJ = [
+  { id:'interrupt', cat:'speech', tag:'voice agents', name:'Interrupt: turn-taking for voice agents', desc:'A voice agent with an explicit, measurable turn-taking module and interruption handling, benchmarked against a fixed-silence baseline and smart-turn detection, with per-service latency traces.', m:[['3-arm','benchmark'],['<600ms','p50 target'],['$0','local stack']], stack:['Pipecat','LiveKit','Whisper','Silero VAD','Ollama'] },
+  { id:'lexiguard_ai', cat:'rag', tag:'legal RAG', name:'LexiGuard AI', desc:'Hybrid legal retrieval fusing dense embeddings and BM25 with reciprocal rank fusion, query expansion into statutory terms, and LLM-as-judge claim verification.', m:[['k=60','RRF'],['top-6','cited chunks'],['0–100%','grounding']], stack:['LangChain','ChromaDB','BM25','Gemini 2.5'] },
+  { id:'time_series', cat:'ts', tag:'deep learning', name:'Transformer vs LSTM forecasting', desc:'Multi-head self-attention from scratch against a parameter-matched LSTM on ETTh1. At lookback 192, MAE 0.1905 vs 0.2277.', m:[['0.1905','MAE @192'],['−16%','vs LSTM'],['102K','params each']], stack:['PyTorch','Self-attention','LSTM','ETTh1'] },
+  { id:'youtube_chatbot', cat:'rag', tag:'multimodal RAG', name:'YouTube video Q&A', desc:'Whisper transcripts, semantic retrieval and reranking across one or many videos, with timestamp-level source attribution.', m:[['top-5','retrieved'],['1000/200','chunk/overlap'],['multi','video']], stack:['Whisper','LangChain','Pinecone','FastAPI','Docker'] },
+  { id:'dalal_bot', cat:'ts', tag:'anomaly detection', name:'DalalBot', desc:'Real-time NSE stock monitor with unsupervised anomaly detection; each alert fires exactly once over email and Telegram.', m:[['2.5%','contamination'],['3.0σ','z-score'],['2','channels']], stack:['Isolation Forest','yfinance','APScheduler','SQLite'] },
+  { id:'Scene-Detection', cat:'vision', tag:'computer vision', name:'Cinematic scene change detector', desc:'Scene cuts from HSV histogram correlation or frame differencing, with live threshold tuning and a keyframe strip for every cut.', m:[['2','algorithms'],['0–100','cut score'],['4','formats']], stack:['OpenCV','NumPy','Streamlit'] },
+];
+const FILTERS = [['all','All'],['rag','RAG'],['vision','Vision'],['speech','Speech'],['ts','Time series']];
+const COLS = ['NLP','LLM','Speech','Vision','Time series','Serving'];
+const ROWS = ['PyTorch','TensorFlow · Keras','YOLOv11 · OpenCV','LangChain · RAG','Pinecone · Chroma','Whisper · Pipecat','sklearn · Prophet','Pandas · NumPy','FastAPI · SQL','Docker · S3 · MLflow'];
+const SK = [[.55,.35,.40,.90,.97,.35],[.40,.10,.10,.55,.80,.30],[.05,.05,.05,.98,.10,.85],[.70,.96,.25,.10,.05,.50],[.50,.93,.10,.05,.05,.55],[.45,.40,.95,.05,.05,.60],[.40,.10,.05,.20,.92,.35],[.55,.45,.20,.35,.95,.40],[.30,.75,.60,.85,.55,.96],[.20,.70,.45,.65,.40,.90]];
+const VOCAB = [
+  { h:'Product', hot:true, items:['Product requirements','Stakeholder communication','Cross-functional coordination','Technical roadmapping','Problem definition','Solution design','Trade-off analysis','Risk identification'] },
+  { h:'AI / ML', items:['Computer vision','Object detection','YOLOv11','PyTorch','TensorFlow','scikit-learn','NLP','Transformers','LSTM','Forecasting','Clustering'] },
+  { h:'LLMs / AI systems', items:['RAG','LangChain','AI agents','Prompt engineering','LLM evaluation','Multimodal AI','Pipeline orchestration','Web-grounded generation'] },
+  { h:'Engineering', items:['Python','SQL','FastAPI','OpenCV','PARSeq OCR','HF Transformers','Pinecone','ChromaDB','BM25','RRF'] },
+  { h:'Data / infra', items:['Pandas','NumPy','PostgreSQL','MySQL','MongoDB','AWS S3','Docker','Git','MLflow'] },
+];
+const CREDS = [
+  ['degree','teal','Master of Computer Applications','deep learning · CNN · RNN · systems','PES University, Bangalore','Oct 2023 – Jun 2025'],
+  ['degree','teal','B.Sc. Physics, Mathematics, Computer Science','linear algebra · probability · physics',"Yuvaraja's College, Mysore",'May 2019 – Oct 2022'],
+  ['certificate','plum','Data Analytics','statistics · SQL · Python · big data · NLP','PES University','certification'],
+  ['certificate','plum','Python for Data Science & Machine Learning','NumPy · Pandas · ML','Udemy','course'],
+  ['certificate','plum','Complete Python Programming Course','Python','Udemy','course'],
 ];
 
-/* ---------- hero network ---------- */
-const cv = document.getElementById('net'), ctx = cv.getContext('2d');
-const LAYERS = [4,7,9,7,4];
-const OUT_LABELS = ['hire','collaborate','ask a question','just browsing'];
-let W=0,H=0,dpr=1,nodes=[],edges=[],pulses=[];
-let mouse={x:.72,y:.4,active:false};
-function layout(){
-  const r=cv.getBoundingClientRect(); dpr=Math.min(devicePixelRatio||1,2); W=r.width; H=r.height;
-  cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-  nodes=[]; edges=[];
-  const x0 = W<860 ? W*.08 : W*.42, x1 = W*.95;
-  LAYERS.forEach((n,li)=>{ const x=x0+(x1-x0)*li/(LAYERS.length-1); for(let i=0;i<n;i++){ nodes.push({li,i,x,y:H*.12+H*.76*(i+.5)/n,a:.2}); } });
-  for(let li=0;li<LAYERS.length-1;li++){ const A=nodes.filter(n=>n.li===li), B=nodes.filter(n=>n.li===li+1); A.forEach(a=>B.forEach(b=>edges.push({a,b,w:(Math.sin(a.i*12.9+b.i*78.2+li)*43758.5%1+1)%1}))); }
-}
-function forward(){
-  const inp=[mouse.x,mouse.y,1-mouse.x,Math.abs(mouse.x-mouse.y)];
-  nodes.filter(n=>n.li===0).forEach((n,i)=>n.target=inp[i]);
-  for(let li=1;li<LAYERS.length;li++){
-    nodes.filter(n=>n.li===li).forEach(b=>{ let s=0,c=0; edges.forEach(e=>{ if(e.b===b){ s+=e.a.target*(e.w*2-.8); c++; } }); b.target=1/(1+Math.exp(-(s/c*6)+ (b.i%3-1)*.4)); });
-  }
-  const outs=nodes.filter(n=>n.li===LAYERS.length-1), ex=outs.map(o=>Math.exp(o.target*4)), sum=ex.reduce((a,b)=>a+b,0);
-  return ex.map(v=>v/sum);
-}
-const probsEl=document.getElementById('probs');
-OUT_LABELS.forEach(l=>{ const r=document.createElement('div'); r.className='probs'; r.innerHTML=`<span>${l}</span><span class="track"><span class="fill"></span></span><span class="v">0.00</span>`; probsEl.appendChild(r); });
-const fills=[...probsEl.querySelectorAll('.fill')], vals=[...probsEl.querySelectorAll('.v')];
-function showProbs(p){ p.forEach((v,i)=>{ fills[i].style.width=(v*100).toFixed(1)+'%'; vals[i].textContent=v.toFixed(2); }); }
-function draw(t){
-  ctx.clearRect(0,0,W,H);
-  edges.forEach(e=>{ const s=(e.a.a+e.b.a)/2; ctx.strokeStyle=magma(.15+s*.6); ctx.globalAlpha=.08+s*.28*e.w; ctx.lineWidth=.6+e.w*.9; ctx.beginPath(); ctx.moveTo(e.a.x,e.a.y); ctx.lineTo(e.b.x,e.b.y); ctx.stroke(); });
-  ctx.globalAlpha=1;
-  if(!reduce && Math.random()<.35){ const e=edges[(Math.random()*edges.length)|0]; if(e.a.a>.35) pulses.push({e,p:0}); }
-  pulses=pulses.filter(q=>{ q.p+=.025; if(q.p>=1) return false; const x=q.e.a.x+(q.e.b.x-q.e.a.x)*q.p, y=q.e.a.y+(q.e.b.y-q.e.a.y)*q.p; ctx.fillStyle=magma(.85); ctx.shadowColor=magma(.7); ctx.shadowBlur=10; ctx.beginPath(); ctx.arc(x,y,1.8,0,7); ctx.fill(); ctx.shadowBlur=0; return true; });
-  nodes.forEach(n=>{ n.a += ((n.target??.2)-n.a)*.08; const r=4+n.a*6; ctx.fillStyle=magma(.1+n.a*.9); ctx.shadowColor=magma(n.a); ctx.shadowBlur=n.a*18; ctx.beginPath(); ctx.arc(n.x,n.y,r,0,7); ctx.fill(); ctx.shadowBlur=0; ctx.strokeStyle='rgba(236,232,245,.25)'; ctx.lineWidth=1; ctx.stroke(); });
-}
-let last=performance.now(), frames=0, acc=0; const fpsEl=document.getElementById('fps');
-function loop(now){
-  const dt=now-last; last=now; acc+=dt; frames++; if(acc>500){ fpsEl.textContent=(acc/frames).toFixed(1)+' ms/step'; acc=0; frames=0; }
-  if(!mouse.active){ const s=now/2600; mouse.x=.5+.35*Math.cos(s); mouse.y=.5+.3*Math.sin(s*1.3); }
-  showProbs(forward()); draw(now); requestAnimationFrame(loop);
-}
-const hero=document.querySelector('.hero');
-hero.addEventListener('pointermove',e=>{ const r=hero.getBoundingClientRect(); mouse.x=(e.clientX-r.left)/r.width; mouse.y=(e.clientY-r.top)/r.height; mouse.active=true; });
-hero.addEventListener('pointerleave',()=>mouse.active=false);
-addEventListener('resize',layout);
-layout();
-if(reduce){ showProbs(forward()); nodes.forEach(n=>n.a=n.target??.3); draw(0); fpsEl.textContent='static'; } else requestAnimationFrame(loop);
+/* ---------- summary ---------- */
+$('summary').innerHTML = SUMMARY.map(([k,v,d])=>`<div><span>${k}</span><b>${v}</b><span>${d}</span></div>`).join('');
 
-/* ---------- loss curve ---------- */
-const svg=document.getElementById('lossSvg'), NS='http://www.w3.org/2000/svg';
-const P={l:48,r:20,t:20,b:40}, VW=640, VH=300;
-const yMin=Math.log10(.1), yMax=Math.log10(3);
-const sx=i=>P.l+(VW-P.l-P.r)*i/(EPOCHS.length-1);
-const sy=v=>P.t+(VH-P.t-P.b)*(1-(Math.log10(v)-yMin)/(yMax-yMin));
-function el(n,a,parent=svg){ const e=document.createElementNS(NS,n); for(const k in a) e.setAttribute(k,a[k]); parent.appendChild(e); return e; }
-const defs=el('defs',{}); const g=el('linearGradient',{id:'lg',x1:0,x2:1,y1:0,y2:0},defs);
-[['0%','#b73779'],['60%','#fc8961'],['100%','#fcfdbf']].forEach(([o,c])=>el('stop',{offset:o,'stop-color':c},g));
-const ga=el('linearGradient',{id:'la',x1:0,x2:0,y1:0,y2:1},defs);
-el('stop',{offset:'0%','stop-color':'#b73779','stop-opacity':.35},ga); el('stop',{offset:'100%','stop-color':'#b73779','stop-opacity':0},ga);
-[0.1,0.3,1,3].forEach(v=>{ el('line',{x1:P.l,x2:VW-P.r,y1:sy(v),y2:sy(v),stroke:'#2c2742','stroke-dasharray':'2 4'}); const t=el('text',{x:P.l-8,y:sy(v)+4,'text-anchor':'end'}); t.textContent=v; });
-EPOCHS.forEach((e,i)=>{ const t=el('text',{x:sx(i),y:VH-P.b+20,'text-anchor':'middle'}); t.textContent=e.y; });
-const yl=el('text',{x:12,y:P.t+4}); yl.textContent='loss';
-// noisy curve through epoch points
-const pts=[]; const N=120;
-for(let k=0;k<=N;k++){ const f=k/N*(EPOCHS.length-1), i=Math.min(Math.floor(f),EPOCHS.length-2), u=f-i;
-  const lv=Math.log10(EPOCHS[i].loss)*(1-u)+Math.log10(EPOCHS[i+1].loss)*u; const noise=(k%N? Math.sin(k*2.7)*.035+Math.sin(k*7.3)*.02 : 0)*(1-f/(EPOCHS.length-1)*.6);
-  pts.push([P.l+(VW-P.l-P.r)*k/N, sy(Math.pow(10,lv+noise))]); }
-const d='M'+pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join('L');
-el('path',{d:d+`L${VW-P.r},${VH-P.b}L${P.l},${VH-P.b}Z`,fill:'url(#la)'});
-const curve=el('path',{d,fill:'none',stroke:'url(#lg)','stroke-width':2.4,'stroke-linejoin':'round'});
-const marks=EPOCHS.map((e,i)=>{ const c=el('circle',{cx:sx(i),cy:sy(e.loss),r:4.5,fill:'#0a0913',stroke:magma(.45+i*.1),'stroke-width':2}); return c; });
-const tag=el('g',{}); const tagBg=el('rect',{rx:4,height:22,fill:'#1d1a2e',stroke:'#2c2742'},tag); const tagT=el('text',{class:'lbl'},tag);
-function focusEpoch(i){
-  const e=EPOCHS[i]; tagT.textContent=`${e.e} · loss ${e.loss.toFixed(2)}`;
-  const w=tagT.getComputedTextLength?tagT.getComputedTextLength()+16:150; let x=sx(i)-w/2; x=Math.max(P.l,Math.min(VW-P.r-w,x)); const y=sy(e.loss)-34;
-  tagBg.setAttribute('x',x); tagBg.setAttribute('y',y); tagBg.setAttribute('width',w); tagT.setAttribute('x',x+8); tagT.setAttribute('y',y+15);
-  marks.forEach((m,k)=>{ m.setAttribute('r',k===i?7:4.5); m.setAttribute('fill',k===i?magma(.9):'#0a0913'); });
-  document.querySelectorAll('#epochs li').forEach((li,k)=>li.classList.toggle('on',k===i));
+/* ---------- loss chart ---------- */
+const lo=Math.log10(.1), hi=Math.log10(3);
+const sy = v => 300*(1-(Math.log10(v)-lo)/(hi-lo));
+const pts=[], N=120;
+for(let k=0;k<=N;k++){ const f=k/N*(EP.length-1), i=Math.min(Math.floor(f),EP.length-2), u=f-i;
+  const lv=Math.log10(EP[i].loss)*(1-u)+Math.log10(EP[i+1].loss)*u, noise=(k%N? Math.sin(k*2.7)*.035+Math.sin(k*7.3)*.02 : 0)*(1-f/(EP.length-1)*.6);
+  pts.push((1000*k/N).toFixed(1)+','+sy(Math.pow(10,lv+noise)).toFixed(1)); }
+const d='M'+pts.join('L');
+$('curve').setAttribute('d',d); $('area').setAttribute('d',d+'L1000,300L0,300Z');
+const plot=$('plot');
+[3,1,.3,.1].forEach(v=>{ const g=document.createElement('div'); g.className='gl'; g.style.top=(sy(v)/3)+'%'; g.innerHTML=`<span>${v}</span>`; plot.appendChild(g); });
+const marks=[], dots=[];
+EP.forEach((e,i)=>{
+  const left=(i/(EP.length-1)*100)+'%', col=vir(i/5*.85+.05);
+  const m=document.createElement('button'); m.type='button'; m.className='mark'; m.style.left=left; m.style.top=(sy(e.loss)/3)+'%'; m.style.borderColor=col; m.dataset.col=col; m.setAttribute('aria-label',`${e.e}, ${e.t}`); m.addEventListener('click',()=>pick(i)); plot.appendChild(m); marks.push(m);
+  const x=document.createElement('span'); x.className='xl'; x.style.left=left; x.textContent=e.y; plot.appendChild(x);
+  const dt=document.createElement('button'); dt.type='button'; dt.setAttribute('aria-label',`${e.e}, ${e.t}`); dt.addEventListener('click',()=>pick(i)); $('dots').appendChild(dt); dots.push(dt);
+});
+function pick(i){ const e=EP[i]; $('ec-e').textContent=`${e.e} · ${e.y}`; $('ec-l').textContent=`loss ${e.loss.toFixed(2)}`; $('ec-t').textContent=e.t; $('ec-d').textContent=e.d;
+  marks.forEach((m,k)=>{ m.classList.toggle('on',k===i); m.style.background=k===i?m.dataset.col:''; }); dots.forEach((b,k)=>b.classList.toggle('on',k===i)); }
+pick(EP.length-1);
+
+/* ---------- experience ---------- */
+$('roles').innerHTML = ROLES.map(r=>`<article class="role"><div class="role-meta"><h3>${r.co}</h3><span style="font-weight:600">${esc(r.title)}</span><span class="when">${r.when}</span><span class="chip ${r.chip[0]}">${r.chip[1]}</span></div>
+  <div class="log panel">${r.lines.map(([t,x])=>`<div><span>[${t}]</span><span>${esc(x)}</span></div>`).join('')}</div></article>`).join('');
+const metrics = m => `<div class="metrics">${m.map(([v,l])=>`<div><b>${v}</b><span>${l}</span></div>`).join('')}</div>`;
+const stack = s => `<div class="stack">${s.map(x=>`<span class="tagpill">${x}</span>`).join('')}</div>`;
+$('prod').innerHTML = PROD.map(p=>`<article class="card panel"><div class="top"><span>${p.id}</span><span style="color:var(--teal-ink)">● ${p.status}</span></div><h4>${esc(p.name)}</h4><p>${esc(p.desc)}</p>${metrics(p.m)}${stack(p.stack)}<div class="where">${p.where.map(w=>`<span>▸ ${w}</span>`).join('')}</div></article>`).join('');
+
+/* ---------- Avera ---------- */
+$('modules').insertAdjacentHTML('beforeend', MODULES.map(([n,t,c,l,d])=>`<div class="tr"><span class="mono muted" style="font-size:12px">${n}</span><span style="font-weight:600">${t}</span><span class="chip ${c}">${l}</span><span class="muted">${d}</span></div>`).join(''));
+$('deps').insertAdjacentHTML('beforeend', DEPS.map(x=>`<div><i style="color:var(--v1)">○</i><span>${x}</span></div>`).join(''));
+$('risks').insertAdjacentHTML('beforeend', RISKS.map(x=>`<div><i style="color:var(--v0)">△</i><span>${x}</span></div>`).join(''));
+
+/* ---------- projects ---------- */
+let filter='all';
+function renderProjects(){
+  $('filters').innerHTML = FILTERS.map(([k,l])=>`<button type="button" data-f="${k}" class="${filter===k?'on':''}" aria-pressed="${filter===k}">${l} <span>${k==='all'?PJ.length:PJ.filter(p=>p.cat===k).length}</span></button>`).join('');
+  $('projects').innerHTML = PJ.filter(p=>filter==='all'||p.cat===filter).map(p=>`<article class="card panel"><div class="top"><span>${p.id}/</span><span style="color:${CAT[p.cat]};font-weight:500">${p.tag}</span></div><h4>${esc(p.name)}</h4><p>${esc(p.desc)}</p>${metrics(p.m)}${stack(p.stack)}<a class="mono" style="font-size:12px;font-weight:500" href="${GH+p.id}" target="_blank" rel="noopener">view repo →</a></article>`).join('');
 }
-const ol=document.getElementById('epochs');
-EPOCHS.forEach((e,i)=>{ const li=document.createElement('li'); li.tabIndex=0; li.innerHTML=`<span class="e">${e.e}<br>${e.y}</span><div><h3>${e.t}</h3><p>${e.d}</p></div>`; li.addEventListener('mouseenter',()=>focusEpoch(i)); li.addEventListener('focus',()=>focusEpoch(i)); ol.appendChild(li); });
-focusEpoch(EPOCHS.length-1);
-if(!reduce){ const len=curve.getTotalLength(); curve.style.strokeDasharray=len; curve.style.strokeDashoffset=0;
-  const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ curve.style.transition='none'; curve.style.strokeDashoffset=len; requestAnimationFrame(()=>requestAnimationFrame(()=>{ curve.style.transition='stroke-dashoffset 2.2s cubic-bezier(.3,.7,.2,1)'; curve.style.strokeDashoffset=0; })); io.disconnect(); } }),{threshold:.4}); io.observe(svg); }
+$('filters').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; filter=b.dataset.f; renderProjects(); });
+renderProjects();
 
-/* ---------- checkpoints ---------- */
-function card(p, box){ const a=document.createElement('article'); a.className='ckpt';
-  a.innerHTML=`<div class="top"><span>${p.id}/</span><span>${p.status?`<span style="color:var(--ok)">● ${p.status}</span>`:p.tag}</span></div><h3>${p.name}</h3><p>${p.desc}</p>
-  <div class="metrics">${p.m.map(([v,l])=>`<div class="metric"><b>${v}</b><span>${l}</span></div>`).join('')}</div>
-  <div class="stack">${p.stack.map(s=>`<span>${s}</span>`).join('')}</div>
-  ${p.repo?`<div class="links"><a href="${p.repo}" target="_blank" rel="noopener">view repo →</a><span style="color:var(--muted)">${p.tag}</span></div>`:`<div class="where">${p.where.map(w=>`<span>▸ ${w}</span>`).join('')}</div>`}`;
-  a.addEventListener('pointermove',e=>{ const r=a.getBoundingClientRect(); a.style.setProperty('--mx',(e.clientX-r.left)+'px'); a.style.setProperty('--my',(e.clientY-r.top)+'px'); });
-  box.appendChild(a); }
-PROJECTS.forEach(p=>card(p,document.getElementById('ckpts')));
-PROD.forEach(p=>card(p,document.getElementById('prodCards')));
-
-/* ---------- attention heatmap ---------- */
-const heat=document.getElementById('heat'); heat.appendChild(document.createElement('span'));
-SK_COLS.forEach(c=>{ const s=document.createElement('span'); s.className='col'; s.textContent=c; heat.appendChild(s); });
-const roV=document.getElementById('ro-v'), roT=document.getElementById('ro-t'), roN=document.getElementById('ro-n');
+/* ---------- heatmap ---------- */
+const heat=$('heat'); heat.insertAdjacentHTML('beforeend','<span></span>'+COLS.map(c=>`<span class="col">${c}</span>`).join(''));
 const note=v=> v>.9?'Core strength. Daily driver.': v>.7?'Shipped to production with it.': v>.4?'Comfortable, used on projects.': v>.2?'Some hands-on experience.':'Mostly curiosity so far.';
-SK_ROWS.forEach((r,i)=>{ const s=document.createElement('span'); s.className='row'; s.textContent=r; heat.appendChild(s);
-  SK[i].forEach((v,j)=>{ const c=document.createElement('button'); c.type='button'; c.className='cell mono'; c.style.background=magma(v); c.style.color=v>.62?'#0a0913':'#ece8f5'; c.style.border='0'; c.style.font='inherit'; c.textContent=v.toFixed(2);
-    c.setAttribute('aria-label',`${r} for ${SK_COLS[j]}: ${v.toFixed(2)}`);
-    const show=()=>{ roV.textContent=v.toFixed(2); roT.textContent=`${r} → ${SK_COLS[j]}`; roN.textContent=note(v); heat.querySelectorAll('.cell').forEach(x=>x.classList.remove('hl')); c.classList.add('hl'); };
-    c.addEventListener('mouseenter',show); c.addEventListener('focus',show); c.addEventListener('click',show); heat.appendChild(c); }); });
+function show(ri,ci,btn){ const v=SK[ri][ci]; $('ro-v').textContent=v.toFixed(2); $('ro-v').style.color=vir(Math.max(v,.45)); $('ro-t').textContent=`${ROWS[ri]} → ${COLS[ci]}`; $('ro-n').textContent=note(v);
+  heat.querySelectorAll('.cell.sel').forEach(c=>c.classList.remove('sel')); btn.classList.add('sel'); }
+let first;
+ROWS.forEach((r,ri)=>{ heat.insertAdjacentHTML('beforeend',`<span class="rn">${r}</span>`);
+  SK[ri].forEach((v,ci)=>{ const b=document.createElement('button'); b.type='button'; b.className='cell'; b.style.background=vir(v); b.style.color=v>.55?'#12151C':'#FFFFFF'; b.textContent=v.toFixed(2); b.setAttribute('aria-label',`${r} for ${COLS[ci]}: ${v.toFixed(2)}`);
+    const h=()=>show(ri,ci,b); b.addEventListener('mouseenter',h); b.addEventListener('focus',h); b.addEventListener('click',h); heat.appendChild(b); if(ri===2&&ci===3) first=b; }); });
+show(2,3,first);
+$('vocab').innerHTML = VOCAB.map(g=>`<div class="vg${g.hot?' hot':''}"><h3>${g.h} · ${g.items.length}</h3><div class="stack">${g.items.map(s=>`<span>${s}</span>`).join('')}</div></div>`).join('');
 
-/* ---------- REPL ---------- */
-const out=document.getElementById('out'), form=document.getElementById('replForm'), cmd=document.getElementById('cmd');
-const hist=[]; let hi=0;
-function print(html){ out.insertAdjacentHTML('beforeend',html+'\n'); out.scrollTop=out.scrollHeight; }
-const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-const CMDS={
-  help:()=>`<span class="hi">commands</span>\n  whoami      who is this model\n  experience  what's in production\n  education   pretraining data\n  projects    list checkpoints\n  skills      top attention weights\n  train       run one training step\n  predict     predict fit for your team\n  contact     inference endpoint\n  clear       clear the session`,
-  whoami:()=>`<span class="hi">Suhas R</span> · AI/ML Engineer @ PESU Venture Labs · Bangalore\nReal-time CV in production, LLM/RAG systems, AI pipeline orchestration.\nCo-founded Channel Ace (FranchiseKonnect), acquihired by PESU Venture Labs.\nMCA, PES University (2025).\nCurrently training: <span class="p">interrupt</span> (turn-taking for voice agents).`,
-  projects:()=>PROJECTS.map(p=>`<span class="p">${p.id.padEnd(16)}</span>${p.name}  <span class="dim">(${p.m[0][0]} ${p.m[0][1]})</span>`).join('\n')+`\n<span class="dim">type a repo name to open its summary</span>`,
-  skills:()=>{ const all=[]; SK.forEach((r,i)=>r.forEach((v,j)=>all.push([v,SK_ROWS[i],SK_COLS[j]]))); return all.sort((a,b)=>b[0]-a[0]).slice(0,5).map(([v,r,c])=>`${v.toFixed(2)}  ${r} → ${c}`).join('\n'); },
-  contact:()=>`email:  <span class="hi">suhasraghu3@gmail.com</span>\nor scroll down to the inference endpoint.`,
-  predict:()=>{ const p=(0.93+Math.random()*.06).toFixed(3); return `P(good_fit | your_team) = <span class="ok">${p}</span>\n<span class="dim">confidence interval: trust me</span>`; },
-  'sudo hire':()=>`<span class="ok">permission granted.</span> run <span class="p">contact</span> to finish the job.`,
-  clear:()=>{ out.innerHTML=''; return null; },
-  exit:()=>`<span class="dim">nice try. this model is always serving.</span>`,
-};
-let step=0, loss=0.12;
-CMDS.experience=()=>`<span class="hi">AI/ML Engineer — PESU Venture Labs</span>  <span class="dim">Nov 2025 – present</span>\n<span class="hi">Co-founder — Channel Ace</span>  <span class="dim">2024 – 2025 · acquihired</span>\n`+PROD.map(p=>`<span class="ok">● ${p.status}</span> ${p.name}\n  <span class="dim">${p.m.map(([v,l])=>v+' '+l).join(' · ')}</span>`).join('\n');
-CMDS.education=()=>EPOCHS.slice(0,3).map(e=>`<span class="p">${e.y.padEnd(8)}</span>${e.t}`).join('\n');
-CMDS.train=()=>{ step++; loss=Math.max(0.01,loss*(0.8+Math.random()*.15)); const bar='█'.repeat(Math.round(20*(1-loss/0.12)))+'░'.repeat(20-Math.round(20*(1-loss/0.12)));
-  return `step ${step}  [${bar}]  loss=<span class="ok">${loss.toFixed(4)}</span>  lr=3e-4`; };
-PROJECTS.forEach(p=>{ CMDS[p.id.toLowerCase()]=()=>`<span class="hi">${p.name}</span>\n${p.desc}\n<span class="dim">${p.m.map(([v,l])=>v+' '+l).join(' · ')}</span>\n<a href="${p.repo}" target="_blank" rel="noopener">${p.repo}</a>`; });
-function run(raw){ const c=raw.trim(); if(!c) return; hist.push(c); hi=hist.length; print(`<span class="p">&gt;&gt;&gt;</span> ${esc(c)}`);
-  const key=c.toLowerCase().replace(/\(\)$/,''); const f=CMDS[key];
-  if(f){ const r=f(); if(r!==null) print(r); }
-  else print(`<span class="err">NameError:</span> name '${esc(c)}' is not defined. try <span class="p">help</span>`); }
-form.addEventListener('submit',e=>{ e.preventDefault(); run(cmd.value); cmd.value=''; });
-cmd.addEventListener('keydown',e=>{ if(e.key==='ArrowUp'&&hi>0){ hi--; cmd.value=hist[hi]; e.preventDefault(); } if(e.key==='ArrowDown'){ hi=Math.min(hist.length,hi+1); cmd.value=hist[hi]||''; e.preventDefault(); } });
-const chips=document.getElementById('chips');
-['whoami','experience','projects','sudo hire'].forEach(c=>{ const b=document.createElement('button'); b.type='button'; b.textContent=c; b.addEventListener('click',()=>run(c)); chips.appendChild(b); });
-const BOOT=[`<span class="dim">loading weights ............ </span><span class="ok">ok</span>`,`<span class="dim">warming up CUDA kernels .... </span><span class="ok">ok</span>`,`<span class="dim">compiling curiosity ........ </span><span class="ok">ok</span>`,`<span class="hi">suhas-r-v1 ready.</span> type <span class="p">help</span> to begin.`];
-if(reduce) BOOT.forEach(print); else BOOT.forEach((l,i)=>setTimeout(()=>print(l),250+i*380));
+/* ---------- datasets ---------- */
+$('creds').insertAdjacentHTML('beforeend', CREDS.map(([k,c,t,tags,o,y])=>`<div class="tr"><span class="chip ${c}">${k}</span><div style="display:flex;flex-direction:column;gap:4px;min-width:0"><span style="font-weight:600">${esc(t)}</span><span class="mono muted" style="font-size:11px">${tags}</span></div><span class="muted">${o}</span><span class="mono muted" style="font-size:12px">${y}</span></div>`).join(''));
 
 /* ---------- copy email ---------- */
-const copyBtn=document.getElementById('copyBtn');
-copyBtn.addEventListener('click',()=>{ const t=document.getElementById('email').textContent;
-  const done=m=>{ copyBtn.textContent=m; setTimeout(()=>copyBtn.textContent='Copy email',1800); };
-  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>done('Copied'),()=>{ const r=document.createRange(); r.selectNodeContents(document.getElementById('email')); const s=getSelection(); s.removeAllRanges(); s.addRange(r); done('Selected, press Ctrl+C'); }); });
+const copyBtn=$('copyBtn');
+copyBtn.addEventListener('click',()=>{ const t=$('email').textContent, done=m=>{ copyBtn.textContent=m; setTimeout(()=>copyBtn.textContent='Copy email',1800); };
+  (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>done('Copied'),()=>{ const r=document.createRange(); r.selectNodeContents($('email')); const s=getSelection(); s.removeAllRanges(); s.addRange(r); done('Selected, press Ctrl+C'); }); });
+
+/* ---------- active tab ---------- */
+const tabs=[...document.querySelectorAll('.tab')];
+const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting) tabs.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+en.target.id)); }),{rootMargin:'-40% 0px -55% 0px'});
+tabs.forEach(a=>{ const s=document.querySelector(a.getAttribute('href')); if(s) io.observe(s); });
 })();
 </script>
-
 </body>
 </html>
